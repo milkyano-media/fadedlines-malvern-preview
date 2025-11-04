@@ -22,6 +22,7 @@ import Josh from "@/assets/web/barbers/booking-list/josh-book.png";
 import Niko from "@/assets/web/barbers/booking-list/niko-book.svg";
 import Noah from "@/assets/web/barbers/booking-list/noah-book.png";
 import Amir from "@/assets/web/barbers/booking-list/amir-book.svg";
+import FadedlinesFallback from "@/assets/web/barbers/booking-list/fadedlines.png";
 // import Hero from "@/assets/web/home/hero.svg";
 
 const barberImages: { [key: string]: string } = {
@@ -86,6 +87,7 @@ const BookList = () => {
       // Fallback to hardcoded order if dashboard API is unavailable
       return [
         // "MUSTAFA",
+        "LUCAS",
         "AMIR",
         "RAYHAN",
         "JAY",
@@ -94,8 +96,8 @@ const BookList = () => {
         "NIKO",
         "ANTHONY",
         "JOSH",
-        "CHRISTOS",
-        "WYATT",
+        // "CHRISTOS",
+        // "WYATT",
       ];
     };
 
@@ -249,23 +251,62 @@ const BookList = () => {
     setExpandedBarber(expandedBarber === barberId ? null : barberId);
   };
 
-  const getBarberImage = (displayName: string) => {
+  const getBarberImage = (displayName: string, teamMemberId?: string) => {
+    // Priority 1: Check for uploaded image from backend
+    if (teamMemberId && teamMembersOrder) {
+      const teamMember = teamMembersOrder.find(
+        (member: any) => member.squareId === teamMemberId
+      );
+
+      if (teamMember?.details?.profileImageUrl) {
+        // Construct full URL for uploaded image
+        const API_BASE_URL = import.meta.env.VITE_NEW_API || 'http://localhost:3001';
+        return `${API_BASE_URL}${teamMember.details.profileImageUrl}`;
+      }
+    }
+
+    // Priority 2: Check for static image by name
     const upperName = displayName.toUpperCase();
     for (const [key, value] of Object.entries(barberImages)) {
       if (upperName.includes(key)) {
         return value;
       }
     }
-    return null;
+
+    // Priority 3: Return Fadedlines logo as final fallback
+    return FadedlinesFallback;
+  };
+
+  /**
+   * Get price description from variation, falling back to generating from price_money
+   * @param variation - Service variation object
+   * @returns Formatted price description string
+   */
+  const getPriceDescription = (variation: any) => {
+    const priceDesc = variation.item_variation_data.price_description;
+
+    // Return existing price_description if available
+    if (priceDesc) {
+      return priceDesc;
+    }
+
+    // Generate from price_money if price_description is null/undefined
+    const priceMoney = variation.item_variation_data.price_money;
+    if (priceMoney?.amount) {
+      const dollars = (priceMoney.amount / 100).toFixed(2);
+      const currency = priceMoney.currency || 'AUD';
+      return `$${dollars} ${currency} + [15% Surcharge On Sundays]`;
+    }
+
+    return 'Price not available';
   };
 
   const extractPriceRange = (services: any[]) => {
     const prices = services
       .map((service) => {
-        const priceMatch =
-          service.item_data.variations[0].item_variation_data.price_description.match(
-            /\$(\d+(\.\d{2})?)/,
-          );
+        // Use helper to get price description (handles null/undefined)
+        const priceDescription = getPriceDescription(service.item_data.variations[0]);
+        const priceMatch = priceDescription?.match(/\$(\d+(\.\d{2})?)/);
         return priceMatch ? parseFloat(priceMatch[1]) : 0;
       })
       .filter((price) => price > 0);
@@ -302,7 +343,10 @@ const BookList = () => {
                     <div className="w-[90%] mx-auto md:w-[300px] h-[250px] md:h-[300px] rounded-lg overflow-hidden">
                       <img
                         src={
-                          getBarberImage(item.barber.display_name) ?? undefined
+                          getBarberImage(
+                            item.barber.display_name,
+                            item.barber.team_member_id
+                          ) ?? undefined
                         }
                         alt={item.barber.display_name}
                         className="w-full h-full object-cover"
@@ -319,8 +363,22 @@ const BookList = () => {
                       {item.barber.display_name.split(" ")[0]}
                     </h2>
                     <p className="text-sm text-white mb-4">
-                      {item.barber.display_name.match(/IG.*?(?=\))|$/)?.[0] +
-                        ")" || ""}
+                      {(() => {
+                        // Try to extract Instagram handle in various formats
+                        // Format 1: "(IG@username)" - with parentheses
+                        const withParens = item.barber.display_name.match(/\(IG[^)]*\)/);
+                        if (withParens) return withParens[0];
+
+                        // Format 2: "IG@username)" - missing opening parenthesis
+                        const missingOpen = item.barber.display_name.match(/IG[^)]*\)/);
+                        if (missingOpen) return `${missingOpen[0]}`;
+
+                        // Format 3: "IG@username" - no parentheses at all
+                        const noParens = item.barber.display_name.match(/IG@\S+/);
+                        if (noParens) return `${noParens[0]}`;
+
+                        return "";
+                      })()}
                     </p>
 
                     {/* Green Line */}
@@ -362,10 +420,7 @@ const BookList = () => {
                                     {service.item_data.name}
                                   </h3>
                                   <p className="text-zinc-400 text-sm mt-1">
-                                    {
-                                      service.item_data.variations[0]
-                                        .item_variation_data.price_description
-                                    }
+                                    {getPriceDescription(service.item_data.variations[0])}
                                   </p>
                                 </div>
                                 <Button

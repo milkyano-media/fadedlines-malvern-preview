@@ -27,7 +27,36 @@ const AppleOAuthButton: React.FC<AppleOAuthButtonProps> = ({
   const appleButtonRef = useRef<HTMLButtonElement>(null);
   const isInitialized = useRef(false);
 
+  // Check if Apple OAuth is configured - must be after hooks
+  const clientId = import.meta.env.VITE_APPLE_CLIENT_ID;
+
+  const initializeAppleAuth = useCallback(() => {
+    if (isInitialized.current || !window.AppleID) return;
+
+    const redirectURI =
+      import.meta.env.VITE_APPLE_REDIRECT_URI || window.location.origin;
+
+    try {
+      // Initialize Apple Sign In
+      window.AppleID.auth.init({
+        clientId: clientId,
+        scope: "name email",
+        redirectURI: redirectURI,
+        state: "state_" + Math.random().toString(36).substring(2, 15),
+        usePopup: true,
+      });
+
+      isInitialized.current = true;
+    } catch (error) {
+      console.error("Apple OAuth initialization error:", error);
+      onError?.("Failed to initialize Apple authentication");
+    }
+  }, [clientId, onError]);
+
   useEffect(() => {
+    // Don't load script if not configured
+    if (!clientId) return;
+
     // Load Apple Sign In script
     const script = document.createElement("script");
     script.src =
@@ -46,38 +75,7 @@ const AppleOAuthButton: React.FC<AppleOAuthButtonProps> = ({
         document.head.removeChild(script);
       }
     };
-  }, []);
-
-  const initializeAppleAuth = useCallback(() => {
-    if (isInitialized.current || !window.AppleID) return;
-
-    const clientId = import.meta.env.VITE_APPLE_CLIENT_ID;
-    const redirectURI =
-      import.meta.env.VITE_APPLE_REDIRECT_URI || window.location.origin;
-
-    if (!clientId) {
-      onError?.(
-        "Apple authentication is not configured. Please contact support."
-      );
-      return;
-    }
-
-    try {
-      // Initialize Apple Sign In
-      window.AppleID.auth.init({
-        clientId: clientId,
-        scope: "name email",
-        redirectURI: redirectURI,
-        state: "state_" + Math.random().toString(36).substring(2, 15),
-        usePopup: true,
-      });
-
-      isInitialized.current = true;
-    } catch (error) {
-      console.error("Apple OAuth initialization error:", error);
-      onError?.("Failed to initialize Apple authentication");
-    }
-  }, [onError]);
+  }, [clientId, initializeAppleAuth]);
 
   const handleAppleSignIn = useCallback(async () => {
     if (!window.AppleID) {
@@ -126,6 +124,11 @@ const AppleOAuthButton: React.FC<AppleOAuthButtonProps> = ({
     onError,
     onNeedPhoneNumber,
   ]);
+
+  // Hide button if Apple OAuth is not configured
+  if (!clientId) {
+    return null;
+  }
 
   return (
     <div className="apple-oauth-container">
