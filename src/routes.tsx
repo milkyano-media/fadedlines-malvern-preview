@@ -17,6 +17,7 @@ import VerifyOTP from '@/pages/auth/VerifyOTP';
 import ChangePhoneNumber from '@/pages/auth/ChangePhoneNumber';
 import ForgotPassword from '@/pages/auth/ForgotPassword';
 import { PublicRoute, ProtectedRoute } from '@/components/routes';
+import { AdminRoute } from '@/components/routes/AdminRoute';
 import { UnverifiedUserHandler } from '@/components/auth/UnverifiedUserHandler';
 
 import JoshLanding from '@/pages/landing/JoshLanding';
@@ -35,6 +36,8 @@ import ThankYou from './components/book/ThankYou';
 import NoahLanding from './pages/landing/NoahLanding';
 import AmirLanding from './pages/landing/AmirLanding';
 import PageTracker from './components/analytics/PageTracker';
+import ParameterManagement from './pages/admin/ParameterManagement';
+import DynamicThemeExample from './components/web/DynamicThemeExample';
 
 const webRoutes = [
   { path: '', component: Home },
@@ -53,6 +56,11 @@ const webRoutes = [
   { path: 'book/appointment', component: BookAppointment },
   { path: 'book/contact-info', component: BookContactInfo },
   { path: 'book/thank-you', component: ThankYou }
+];
+
+const adminRoutes = [
+  { path: 'admin/parameters', component: ParameterManagement },
+  { path: 'admin/theme-example', component: DynamicThemeExample }
 ];
 
 const metaWebRoutes = [
@@ -223,6 +231,19 @@ const AppRoutes: React.FC = () => {
             <Route path={`/${path}`} element={<Component />} />
             <Route path={`/meta/${path}`} element={<Component />} />
           </React.Fragment>
+        ))}
+
+        {/* ADMIN ROUTES - Protected with AdminRoute */}
+        {adminRoutes.map(({ path, component: Component }) => (
+          <Route
+            key={path}
+            path={`/${path}`}
+            element={
+              <AdminRoute>
+                <Component />
+              </AdminRoute>
+            }
+          />
         ))}
 
         {/* ACCOUNT ROUTES - Protected with nested sub-routes */}
