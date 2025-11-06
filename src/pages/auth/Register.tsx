@@ -28,6 +28,7 @@ import GoogleOAuthButton from "@/components/auth/GoogleOAuthButton";
 import GooglePhoneNumberModal from "@/components/auth/GooglePhoneNumberModal";
 import AppleOAuthButton from "@/components/auth/AppleOAuthButton";
 import ApplePhoneNumberModal from "@/components/auth/ApplePhoneNumberModal";
+import { useFeatureFlag } from "@/hooks/useParameter";
 
 const registerSchema = z
   .object({
@@ -65,6 +66,10 @@ export default function Register() {
   const [searchParams] = useSearchParams();
   const { toast } = useToast();
   const { login: authLogin } = useAuth();
+
+  // Feature flags for OAuth providers
+  const isGoogleOAuthEnabled = useFeatureFlag('google_oauth_enabled');
+  const isAppleOAuthEnabled = useFeatureFlag('apple_oauth_enabled');
 
   const form = useForm<RegisterFormData>({
     resolver: zodResolver(registerSchema),
@@ -177,55 +182,61 @@ export default function Register() {
           </div>
 
           <div className="bg-stone-900/50 backdrop-blur-sm border border-stone-700/50 rounded-2xl p-6 shadow-2xl">
-            {/* OAuth Buttons */}
-            <div className="mb-3 space-y-3">
-              <GoogleOAuthButton
-                onSuccess={() => {
-                  toast({
-                    title: "Success",
-                    description:
-                      "You have successfully registered with Google!",
-                  });
-                  const redirect = searchParams.get("redirect");
-                  navigate(redirect || "/");
-                }}
-                onError={(error) => {
-                  toast({
-                    title: "Error",
-                    description: error,
-                    variant: "destructive",
-                  });
-                }}
-                onNeedPhoneNumber={(profile, idToken) => {
-                  setGoogleProfile(profile);
-                  setGoogleIdToken(idToken);
-                  setShowPhoneModal(true);
-                }}
-              />
+            {/* OAuth Buttons - controlled by feature flags */}
+            {(isGoogleOAuthEnabled || isAppleOAuthEnabled) && (
+              <div className="mb-3 space-y-3">
+                {isGoogleOAuthEnabled && (
+                  <GoogleOAuthButton
+                    onSuccess={() => {
+                      toast({
+                        title: "Success",
+                        description:
+                          "You have successfully registered with Google!",
+                      });
+                      const redirect = searchParams.get("redirect");
+                      navigate(redirect || "/");
+                    }}
+                    onError={(error) => {
+                      toast({
+                        title: "Error",
+                        description: error,
+                        variant: "destructive",
+                      });
+                    }}
+                    onNeedPhoneNumber={(profile, idToken) => {
+                      setGoogleProfile(profile);
+                      setGoogleIdToken(idToken);
+                      setShowPhoneModal(true);
+                    }}
+                  />
+                )}
 
-              <AppleOAuthButton
-                onSuccess={() => {
-                  toast({
-                    title: "Success",
-                    description: "You have successfully registered with Apple!",
-                  });
-                  const redirect = searchParams.get("redirect");
-                  navigate(redirect || "/");
-                }}
-                onError={(error) => {
-                  toast({
-                    title: "Error",
-                    description: error,
-                    variant: "destructive",
-                  });
-                }}
-                onNeedPhoneNumber={(profile, idToken) => {
-                  setAppleProfile(profile);
-                  setAppleIdToken(idToken);
-                  setShowApplePhoneModal(true);
-                }}
-              />
-            </div>
+                {isAppleOAuthEnabled && (
+                  <AppleOAuthButton
+                    onSuccess={() => {
+                      toast({
+                        title: "Success",
+                        description: "You have successfully registered with Apple!",
+                      });
+                      const redirect = searchParams.get("redirect");
+                      navigate(redirect || "/");
+                    }}
+                    onError={(error) => {
+                      toast({
+                        title: "Error",
+                        description: error,
+                        variant: "destructive",
+                      });
+                    }}
+                    onNeedPhoneNumber={(profile, idToken) => {
+                      setAppleProfile(profile);
+                      setAppleIdToken(idToken);
+                      setShowApplePhoneModal(true);
+                    }}
+                  />
+                )}
+              </div>
+            )}
 
             <div className="relative">
               <div className="absolute inset-0 flex items-center">

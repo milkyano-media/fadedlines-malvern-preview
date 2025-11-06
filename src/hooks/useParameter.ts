@@ -123,7 +123,7 @@ export function useParameterValue<T = string>(
   const { parameter, loading } = useParameter({ key: key as string });
 
   useEffect(() => {
-    if (!loading && parameter?.is_active) {
+    if (!loading && parameter?.isActive) {
       setValue((parameter.value as T) ?? defaultValue);
     } else if (!loading) {
       setValue(defaultValue);
@@ -161,7 +161,7 @@ export function useParameterValues(keys: Array<keyof ParameterValues>) {
           keys.map(async (key) => {
             try {
               const response = await getParameterByKey(key as string);
-              if (response.parameter?.is_active) {
+              if (response.parameter?.isActive) {
                 results[key as string] = response.parameter.value;
               }
             } catch {
@@ -201,7 +201,7 @@ export function useParametersByCategory(category: ParameterCategory) {
     if (!loading && parameters.length > 0) {
       const paramMap = parameters.reduce(
         (acc, param) => {
-          if (param.is_active) {
+          if (param.isActive) {
             acc[param.key] = param.value;
           }
           return acc;

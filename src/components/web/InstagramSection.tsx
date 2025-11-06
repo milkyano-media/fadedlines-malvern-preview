@@ -77,6 +77,7 @@ const InstagramSection: React.FC<InstagramSectionProps> = ({
         <div className="hidden md:flex md:flex-row gap-2 h-full w-full overflow-hidden rounded-3xl ">
           {instagram_images_desktop.map((image, index) => (
             <div
+            key={index}
               className={`h-[30em] md:h-[500px] ${
                 index === instagram_images_desktop.length - 1
                   ? "w-[500px] hover:w-[500px]"
@@ -84,7 +85,6 @@ const InstagramSection: React.FC<InstagramSectionProps> = ({
               } aspect-[4/10] object-fill transition-all duration-500 brightness-50 scale-100 hover:brightness-100 rounded-3xl relative`}
             >
               <img
-                key={index}
                 width={500}
                 height={500}
                 className="h-full w-full object-cover rounded-3xl"

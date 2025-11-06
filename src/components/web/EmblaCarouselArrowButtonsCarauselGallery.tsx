@@ -81,7 +81,7 @@ export const PrevButton = React.forwardRef<HTMLButtonElement, PropType>((props, 
                 <path d="M55 37C56.1046 37 57 36.1046 57 35C57 33.8954 56.1046 33 55 33L55 37ZM21.5858 33.5858C20.8047 34.3668 20.8047 35.6332 21.5858 36.4142L34.3137 49.1421C35.0948 49.9232 36.3611 49.9232 37.1421 49.1421C37.9232 48.3611 37.9232 47.0948 37.1421 46.3137L25.8284 35L37.1421 23.6863C37.9232 22.9052 37.9232 21.6389 37.1421 20.8579C36.3611 20.0768 35.0948 20.0768 34.3137 20.8579L21.5858 33.5858ZM55 33L23 33L23 37L55 37L55 33Z" fill="url(#paint0_linear_566_432)" />
                 <defs>
                     <filter id="filter0_d_566_432" x="0" y="0" width="78" height="78" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-                        <feFlood flood-opacity="0" result="BackgroundImageFix" />
+                        <feFlood floodOpacity="0" result="BackgroundImageFix" />
                         <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
                         <feOffset dy="4" />
                         <feGaussianBlur stdDeviation="7.5" />
@@ -121,7 +121,7 @@ export const NextButton = React.forwardRef<HTMLButtonElement, PropType>((props, 
                 <path d="M23 33C21.8954 33 21 33.8954 21 35C21 36.1046 21.8954 37 23 37V33ZM56.4142 36.4142C57.1953 35.6332 57.1953 34.3668 56.4142 33.5858L43.6863 20.8579C42.9052 20.0768 41.6389 20.0768 40.8579 20.8579C40.0768 21.6389 40.0768 22.9052 40.8579 23.6863L52.1716 35L40.8579 46.3137C40.0768 47.0948 40.0768 48.3611 40.8579 49.1421C41.6389 49.9232 42.9052 49.9232 43.6863 49.1421L56.4142 36.4142ZM23 37L55 37V33L23 33V37Z" fill="url(#paint0_linear_566_433)" />
                 <defs>
                     <filter id="filter0_d_566_433" x="0" y="0" width="78" height="78" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-                        <feFlood flood-opacity="0" result="BackgroundImageFix" />
+                        <feFlood floodOpacity="0" result="BackgroundImageFix" />
                         <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
                         <feOffset dy="4" />
                         <feGaussianBlur stdDeviation="7.5" />
