@@ -20,7 +20,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
-import { Settings, Edit, Trash2, Search, RefreshCw } from "lucide-react";
+import { Settings, Edit, Trash2, Search, RefreshCw, AlertCircle, CheckCircle } from "lucide-react";
 import { Parameter, ParameterType, ParameterCategory, UpdateParameterRequest } from "@/interfaces/ParameterInterface";
 import {
     getAllParameters,
@@ -410,6 +410,107 @@ export default function ParameterManagement() {
                                                             </FormControl>
                                                             <FormDescription>
                                                                 Upload PNG, JPG, or JPEG image (converted to base64)
+                                                            </FormDescription>
+                                                            <FormMessage />
+                                                        </FormItem>
+                                                    );
+                                                }
+
+                                                // JSON Editor with real-time validation
+                                                if (paramType === "JSON") {
+                                                    const [jsonError, setJsonError] = useState<string | null>(null);
+
+                                                    return (
+                                                        <FormItem>
+                                                            <FormLabel>Value (JSON)</FormLabel>
+                                                            <FormControl>
+                                                                <div className="space-y-2">
+                                                                    <Textarea
+                                                                        {...field}
+                                                                        placeholder='{"key": "value"}'
+                                                                        className="bg-theme-card border-theme-border min-h-[120px] font-mono text-sm"
+                                                                        onChange={(e) => {
+                                                                            field.onChange(e.target.value);
+                                                                            // Real-time validation
+                                                                            try {
+                                                                                if (e.target.value.trim()) {
+                                                                                    JSON.parse(e.target.value);
+                                                                                    setJsonError(null);
+                                                                                } else {
+                                                                                    setJsonError(null);
+                                                                                }
+                                                                            } catch (err) {
+                                                                                setJsonError(err instanceof Error ? err.message : "Invalid JSON");
+                                                                            }
+                                                                        }}
+                                                                    />
+                                                                    {jsonError && (
+                                                                        <p className="text-sm text-red-500 flex items-center gap-1">
+                                                                            <AlertCircle className="w-4 h-4" />
+                                                                            {jsonError}
+                                                                        </p>
+                                                                    )}
+                                                                    {!jsonError && field.value && field.value.trim() && (
+                                                                        <p className="text-sm text-green-500 flex items-center gap-1">
+                                                                            <CheckCircle className="w-4 h-4" />
+                                                                            Valid JSON
+                                                                        </p>
+                                                                    )}
+                                                                </div>
+                                                            </FormControl>
+                                                            <FormDescription>
+                                                                Enter valid JSON object (e.g., business hours)
+                                                            </FormDescription>
+                                                            <FormMessage />
+                                                        </FormItem>
+                                                    );
+                                                }
+
+                                                // URL Input with real-time validation
+                                                if (paramType === "URL") {
+                                                    const [urlError, setUrlError] = useState<string | null>(null);
+
+                                                    return (
+                                                        <FormItem>
+                                                            <FormLabel>Value (URL)</FormLabel>
+                                                            <FormControl>
+                                                                <div className="space-y-2">
+                                                                    <Input
+                                                                        {...field}
+                                                                        type="url"
+                                                                        placeholder="https://example.com"
+                                                                        className="bg-theme-card border-theme-border"
+                                                                        onChange={(e) => {
+                                                                            field.onChange(e.target.value);
+                                                                            // Real-time validation
+                                                                            try {
+                                                                                if (e.target.value.trim()) {
+                                                                                    new URL(e.target.value);
+                                                                                    setUrlError(null);
+                                                                                } else {
+                                                                                    setUrlError(null);
+                                                                                }
+                                                                            } catch {
+                                                                                setUrlError("Invalid URL format (must include https:// or http://)");
+                                                                            }
+                                                                        }}
+                                                                    />
+                                                                    {urlError && (
+                                                                        <p className="text-sm text-red-500 flex items-center gap-1">
+                                                                            <AlertCircle className="w-4 h-4" />
+                                                                            {urlError}
+                                                                        </p>
+                                                                    )}
+                                                                    {!urlError && field.value && field.value.trim() && (
+                                                                        <p className="text-sm text-green-500 flex items-center gap-1">
+                                                                            <CheckCircle className="w-4 h-4" />
+                                                                            Valid URL
+                                                                        </p>
+                                                                    )}
+                                                                </div>
+                                                            </FormControl>
+                                                            <FormDescription>
+                                                                Enter complete URL with protocol (https://...)
                                                             </FormDescription>
                                                             <FormMessage />
                                                         </FormItem>

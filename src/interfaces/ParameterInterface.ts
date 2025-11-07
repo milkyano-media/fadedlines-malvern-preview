@@ -30,13 +30,9 @@ export enum ParameterType {
 export enum ParameterCategory {
     THEME = "THEME",
     BRANDING = "BRANDING",
-    LAYOUT = "LAYOUT",
     CONTENT = "CONTENT",
     FEATURE_FLAG = "FEATURE_FLAG",
-    SEO = "SEO",
-    ANALYTICS = "ANALYTICS",
     CONTACT = "CONTACT",
-    BOOKING = "BOOKING",
 }
 
 // Request/Response types
@@ -125,6 +121,15 @@ export interface ParameterValues {
     // Analytics parameters
     "analytics.google_analytics_id"?: string;
     "analytics.facebook_pixel_id"?: string;
+
+    // Contact parameters (Phase 3.1)
+    "contact.phone_number"?: string;
+    "contact.email"?: string;
+    "contact.address"?: string;
+    "contact.business_hours"?: Record<string, string>;
+    "contact.google_maps_url"?: string;
+    "contact.instagram_url"?: string;
+    "contact.facebook_url"?: string;
 }
 
 // Error response type
