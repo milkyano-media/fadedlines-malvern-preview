@@ -76,7 +76,7 @@ export default function AccountProfile() {
   };
 
   return (
-    <Card className="bg-[#0a0a0a] border-stone-800">
+    <Card className="bg-theme-card border-theme-border">
       <CardHeader>
         <CardTitle>Profile Information</CardTitle>
         <CardDescription>
@@ -149,7 +149,7 @@ export default function AccountProfile() {
               )}
             />
 
-            <div className="bg-stone-900 rounded-lg p-4">
+            <div className="bg-theme-card rounded-lg p-4">
               <div className="flex items-center gap-3 text-gray-400">
                 <Phone className="w-4 h-4" />
                 <div>

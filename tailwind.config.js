@@ -52,6 +52,14 @@ module.exports = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        // Parameter-based theme colors
+        'theme-primary': 'var(--primary-color)',
+        'theme-secondary': 'var(--secondary-color)',
+        'theme-bg': 'var(--background-color)',
+        'theme-card': 'var(--card-background-color)',
+        'theme-border': 'var(--border-color)',
+        'theme-text': 'var(--text-color-primary)',
+        'theme-text-muted': 'var(--text-color-secondary)',
       },
       borderRadius: {
         lg: "var(--radius)",

@@ -113,7 +113,7 @@ export default function ForgotPassword() {
 
       <section className="min-h-screen bg-[#010401] flex items-center justify-center py-20">
         <div className="container mx-auto px-4 max-w-md">
-          <Card className="bg-[#0a0a0a] border-stone-800">
+          <Card className="bg-theme-card border-theme-border">
             <CardHeader className="space-y-1 text-center">
               <CardTitle className="text-2xl font-bold">Forgot Password?</CardTitle>
               <CardDescription>

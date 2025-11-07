@@ -34,6 +34,7 @@ import { useToast } from '@/components/ui/use-toast';
 import { format } from 'date-fns';
 import moment from 'moment-timezone';
 import { Calendar } from '@/components/ui/calendar';
+import { useParameterValue } from '@/hooks/useParameter';
 
 interface TimeOfDay {
   title: string;
@@ -49,6 +50,10 @@ const ThankYouPage = () => {
   const { toast } = useToast();
   const [barberName, setBarberName] = useState<string>('');
   const [thankYouTime, setThankYouTime] = useState<string>('');
+
+  // Fetch booking success parameters
+  const bookingSuccessTitle = useParameterValue<string>('content.booking_success_title', 'Thanks For Booking');
+  const bookingSuccessMessage = useParameterValue<string>('content.booking_success_message', 'Your Appointment is Coming Up');
 
   // Calendar helper function
   const generateCalendarUrls = () => {
@@ -736,9 +741,9 @@ END:VCALENDAR`,
         <section className='flex flex-col gap-2 pb-4 text-stone-200 relative w-full'>
           <div className='text-start w-full text-stone-200 text-sm py-2'>
             <h3 className='text-lg lg:text-xl font-medium '>
-              Thanks For Booking
+              {bookingSuccessTitle}
             </h3>
-            <p className='font-extralight'>Your Appointment is Coming Up</p>
+            <p className='font-extralight'>{bookingSuccessMessage}</p>
           </div>
           <div className='relative  h-8 w-full px-4'>
             <hr className='absolute top-0 left-0  w-[15rem] h-[3px] bg-[#42FF00] transform  z-10' />

@@ -140,7 +140,7 @@ export default function AccountSecurity() {
   };
 
   return (
-    <Card className="bg-[#0a0a0a] border-stone-800">
+    <Card className="bg-theme-card border-theme-border">
       <CardHeader>
         <CardTitle>Security Settings</CardTitle>
         <CardDescription>

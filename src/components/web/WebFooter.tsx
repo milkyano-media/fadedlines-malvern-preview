@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 import Logo from "@/assets/web/icons/logo.svg";
+import { useParameterValue } from "@/hooks/useParameter";
 import Facebook from "@/assets/web/icons/Facebook.svg";
 import Instagram from "@/assets/web/icons/Instagram.svg";
 import Youtube from "@/assets/web/icons/Youtube.svg";
@@ -10,6 +11,10 @@ import BgHero2 from "@/assets/web/home/hero.svg";
 import { generateLink } from "@/pages/web/Home";
 
 const WebFooter: React.FC = () => {
+  // Fetch footer parameters
+  const footerTagline = useParameterValue<string>('content.footer_tagline', 'Your style, our passion');
+  const logoUrl = useParameterValue<string>('branding.logo_url', '');
+
   return (
     <footer className="flex flex-col">
       <section className="flex flex-col justify-center items-center relative py-60">
@@ -57,11 +62,16 @@ const WebFooter: React.FC = () => {
       <section className="relative z-10">
         <div className="container mx-auto py-12 flex flex-col md:flex-row  justify-between relative z-0">
           <div className="flex flex-col pb-12 md:py-0 gap-10">
-            <img
-              src={Logo}
-              alt="barber shop faded lines"
-              className="w-[20rem] h-auto"
-            />
+            <div className="flex flex-col gap-3">
+              <img
+                src={logoUrl || Logo}
+                alt="barber shop faded lines"
+                className="w-[20rem] h-auto"
+              />
+              {footerTagline && (
+                <p className="text-sm text-stone-400 italic">{footerTagline}</p>
+              )}
+            </div>
             <div className="flex flex-col gap-4 relative z-[99999999]">
               <h4 className="text-sm font-poppins font-medium">Visit us on:</h4>
               <ul className="flex gap-4 font-light relative z-40">

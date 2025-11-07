@@ -181,7 +181,7 @@ export default function Register() {
             </p>
           </div>
 
-          <div className="bg-stone-900/50 backdrop-blur-sm border border-stone-700/50 rounded-2xl p-6 shadow-2xl">
+          <div className="bg-theme-card/50 backdrop-blur-sm border border-stone-700/50 rounded-2xl p-6 shadow-2xl">
             {/* OAuth Buttons - controlled by feature flags */}
             {(isGoogleOAuthEnabled || isAppleOAuthEnabled) && (
               <div className="mb-3 space-y-3">
@@ -243,7 +243,7 @@ export default function Register() {
                 <span className="w-full border-t border-stone-600" />
               </div>
               <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-stone-900/50 px-2 text-stone-400">
+                <span className="bg-theme-card/50 px-2 text-stone-400">
                   Or register with email
                 </span>
               </div>
@@ -432,7 +432,7 @@ export default function Register() {
               </form>
             </Form>
 
-            <div className="mt-6 pt-6 border-t border-stone-800 text-center">
+            <div className="mt-6 pt-6 border-t border-theme-border text-center">
               <p className="text-gray-400">
                 Already have an account?{" "}
                 <button

@@ -105,14 +105,14 @@ export default function Account() {
           </div>
 
           <Tabs defaultValue="profile" className="space-y-6">
-            <TabsList className="grid w-full grid-cols-3 bg-stone-900">
+            <TabsList className="grid w-full grid-cols-3 bg-theme-card">
               <TabsTrigger value="profile">Profile</TabsTrigger>
               <TabsTrigger value="bookings">Bookings</TabsTrigger>
               <TabsTrigger value="security">Security</TabsTrigger>
             </TabsList>
 
             <TabsContent value="profile" className="space-y-6">
-              <Card className="bg-[#0a0a0a] border-stone-800">
+              <Card className="bg-theme-card border-theme-border">
                 <CardHeader>
                   <CardTitle>Profile Information</CardTitle>
                   <CardDescription>
@@ -185,7 +185,7 @@ export default function Account() {
                         )}
                       />
 
-                      <div className="bg-stone-900 rounded-lg p-4">
+                      <div className="bg-theme-card rounded-lg p-4">
                         <div className="flex items-center gap-3 text-gray-400">
                           <Phone className="w-4 h-4" />
                           <div>
@@ -210,7 +210,7 @@ export default function Account() {
             </TabsContent>
 
             <TabsContent value="bookings" className="space-y-6">
-              <Card className="bg-[#0a0a0a] border-stone-800">
+              <Card className="bg-theme-card border-theme-border">
                 <CardHeader>
                   <CardTitle>Booking History</CardTitle>
                   <CardDescription>
@@ -228,7 +228,7 @@ export default function Account() {
             </TabsContent>
 
             <TabsContent value="security" className="space-y-6">
-              <Card className="bg-[#0a0a0a] border-stone-800">
+              <Card className="bg-theme-card border-theme-border">
                 <CardHeader>
                   <CardTitle>Security Settings</CardTitle>
                   <CardDescription>
@@ -245,7 +245,7 @@ export default function Account() {
                     Change Password
                   </Button>
 
-                  <div className="pt-4 border-t border-stone-800">
+                  <div className="pt-4 border-t border-theme-border">
                     <Button
                       variant="destructive"
                       onClick={handleLogout}

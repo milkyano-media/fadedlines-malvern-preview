@@ -23,14 +23,20 @@ export enum ParameterType {
     BOOLEAN = "BOOLEAN",
     COLOR = "COLOR",
     JSON = "JSON",
-    IMAGE_URL = "IMAGE_URL",
+    BASE64 = "BASE64",
     URL = "URL",
 }
 
 export enum ParameterCategory {
-    THEME = "theme",
-    CONTENT = "content",
-    FEATURE_FLAG = "feature_flag",
+    THEME = "THEME",
+    BRANDING = "BRANDING",
+    LAYOUT = "LAYOUT",
+    CONTENT = "CONTENT",
+    FEATURE_FLAG = "FEATURE_FLAG",
+    SEO = "SEO",
+    ANALYTICS = "ANALYTICS",
+    CONTACT = "CONTACT",
+    BOOKING = "BOOKING",
 }
 
 // Request/Response types
@@ -66,17 +72,23 @@ export interface ParameterQueryParams {
 
 // Utility type for strongly-typed parameter values by key
 export interface ParameterValues {
-    // Theme parameters
+    // Theme parameters (Phase 1 & 2)
     "theme.primary_color"?: string;
     "theme.secondary_color"?: string;
     "theme.background_color"?: string;
-    "theme.text_color"?: string;
+    "theme.card_background_color"?: string;
+    "theme.border_color"?: string;
+    "theme.text_color_primary"?: string;
+    "theme.text_color_secondary"?: string;
+    "theme.text_color"?: string; // legacy
     "theme.font_family"?: string;
 
-    // Branding parameters
+    // Branding parameters (Phase 1 & 2)
     "branding.logo_url"?: string;
+    "branding.logo_url_dark"?: string;
     "branding.company_name"?: string;
-    "branding.tagline"?: string;
+    "branding.company_tagline"?: string;
+    "branding.tagline"?: string; // legacy
     "branding.favicon_url"?: string;
 
     // Layout parameters
@@ -84,13 +96,24 @@ export interface ParameterValues {
     "layout.footer_style"?: "minimal" | "full";
     "layout.sidebar_enabled"?: boolean;
 
-    // Content parameters
+    // Content parameters (Phase 1 & 2)
     "content.homepage_hero_title"?: string;
     "content.homepage_hero_subtitle"?: string;
-    "content.cta_button_text"?: string;
+    "content.cta_primary_text"?: string;
+    "content.cta_button_text"?: string; // legacy
+    "content.promotional_message"?: string;
+    "content.emergency_message"?: string;
+    "content.booking_success_title"?: string;
+    "content.booking_success_message"?: string;
+    "content.about_us_headline"?: string;
+    "content.footer_tagline"?: string;
 
-    // Feature flags
+    // Feature flags (Phase 1)
     "feature.booking_enabled"?: boolean;
+    "feature.google_oauth_enabled"?: boolean;
+    "feature.apple_oauth_enabled"?: boolean;
+    "feature.phone_verification_enabled"?: boolean;
+    "feature.promotional_banner_enabled"?: boolean;
     "feature.chat_support_enabled"?: boolean;
     "feature.loyalty_program_enabled"?: boolean;
 

@@ -2,6 +2,7 @@ import Layout from "@/components/web/WebLayout";
 import { Facebook, Instagram, Tiktok, Youtube } from "react-bootstrap-icons";
 import { Button } from "@/components/ui/button";
 import { Helmet } from "react-helmet-async";
+import { useParameterValue } from "@/hooks/useParameter";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -63,6 +64,9 @@ const SocialMediaLinks: React.FC = () => {
 };
 
 export default function AboutUs() {
+  // Fetch about us headline parameter
+  const aboutUsHeadline = useParameterValue<string>('content.about_us_headline', 'About Fadedlines');
+
   return (
     <Layout>
       <Helmet>
@@ -92,8 +96,7 @@ export default function AboutUs() {
         <div className="top-0 absolute w-full h-full object-cover z-0 bg-gradient-to-b from-black/80 to-black" />
         <div className="flex flex-col justify-center items-center text-center gap-6 z-10">
           <div className="flex flex-col mb-12">
-            <h2 className="text-[#33FF00]">AWARD WINNING</h2>
-            <h2>BARBERSHOP</h2>
+            <h2 className="text-[#33FF00]">{aboutUsHeadline}</h2>
             <sub className="mt-6">
               55 PORTMAN ST; OAKLEIGH VIC 3166; AUSTRALIA
             </sub>

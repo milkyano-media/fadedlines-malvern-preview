@@ -117,7 +117,7 @@ export default function Login() {
             </p>
           </div>
 
-          <div className="bg-[#0a0a0a] border border-stone-800 rounded-xl p-8">
+          <div className="bg-theme-card border border-theme-border rounded-xl p-8">
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
                 <FormField
@@ -207,10 +207,10 @@ export default function Login() {
             <div className="mt-8">
               <div className="relative">
                 <div className="absolute inset-0 flex items-center">
-                  <div className="w-full border-t border-stone-800"></div>
+                  <div className="w-full border-t border-theme-border"></div>
                 </div>
                 <div className="relative flex justify-center text-sm">
-                  <span className="px-2 bg-[#0a0a0a] text-gray-500">Or continue with</span>
+                  <span className="px-2 bg-theme-card text-gray-500">Or continue with</span>
                 </div>
               </div>
 

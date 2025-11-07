@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import Logo from "@/components/react-svg/logo";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useParameterValue } from "@/hooks/useParameter";
+import { useTheme } from "@/ThemeProvider";
 
 import {
   Sheet,
@@ -65,6 +67,14 @@ const Header: React.FC = () => {
   const navigate = useNavigate();
   const { isAuthenticated, user, logout } = useAuth();
 
+  // Fetch logo parameters
+  const { theme } = useTheme();
+  const logoUrl = useParameterValue<string>('branding.logo_url', '');
+  const logoUrlDark = useParameterValue<string>('branding.logo_url_dark', '');
+
+  // Use dark logo if theme is dark and dark logo exists, otherwise use regular logo, fallback to Logo component
+  const currentLogo = theme === 'dark' && logoUrlDark ? logoUrlDark : (logoUrl || null);
+
   const generateRoute = (route: string): string => {
     const parts = location.pathname.split("/");
     if (parts[1] === "meta") {
@@ -108,7 +118,15 @@ const Header: React.FC = () => {
         </h1>
         <div className="flex flex-col justify-center items-center">
           <Link to={generateRoute("/home")}>
-            <Logo className="w-48 md:w-36 h-auto opacity-90 " />
+            {currentLogo ? (
+              <img
+                src={currentLogo}
+                alt="logo"
+                className="w-48 md:w-36 h-auto opacity-90"
+              />
+            ) : (
+              <Logo className="w-48 md:w-36 h-auto opacity-90 " />
+            )}
           </Link>
         </div>
         <nav className="hidden lg:block sticky top-0">

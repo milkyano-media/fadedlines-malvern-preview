@@ -259,13 +259,13 @@ export default function ParameterManagement() {
                         <Button
                             variant="outline"
                             onClick={fetchParameters}
-                            className="border-stone-800 hover:bg-stone-900"
+                            className="border-theme-border hover:bg-theme-card"
                         >
                             <RefreshCw className="w-4 h-4 mr-2" />
                             Refresh
                         </Button>
                         <Dialog open={isDialogOpen} onOpenChange={handleDialogClose}>
-                            <DialogContent className="bg-[#0a0a0a] border-stone-800 text-white max-w-2xl">
+                            <DialogContent className="bg-theme-card border-theme-border text-white max-w-2xl">
                                 <DialogHeader>
                                     <DialogTitle>
                                         {editingParameter ? "Edit Parameter" : "Create New Parameter"}
@@ -309,7 +309,7 @@ export default function ParameterManagement() {
                                                         <Input
                                                             {...field}
                                                             placeholder="e.g., theme.primary_color"
-                                                            className="bg-stone-900 border-stone-800 cursor-not-allowed opacity-60"
+                                                            className="bg-theme-card border-theme-border cursor-not-allowed opacity-60"
                                                             readOnly
                                                         />
                                                     </FormControl>
@@ -329,7 +329,7 @@ export default function ParameterManagement() {
                                                     <FormControl>
                                                         <Input
                                                             {...field}
-                                                            className="bg-stone-900 border-stone-800 cursor-not-allowed opacity-60"
+                                                            className="bg-theme-card border-theme-border cursor-not-allowed opacity-60"
                                                             readOnly
                                                         />
                                                     </FormControl>
@@ -343,22 +343,97 @@ export default function ParameterManagement() {
                                         <FormField
                                             control={form.control}
                                             name="value"
-                                            render={({ field }) => (
-                                                <FormItem>
-                                                    <FormLabel>Value</FormLabel>
-                                                    <FormControl>
-                                                        <Textarea
-                                                            {...field}
-                                                            placeholder="Enter value"
-                                                            className="bg-stone-900 border-stone-800 min-h-[80px]"
-                                                        />
-                                                    </FormControl>
-                                                    <FormDescription>
-                                                        Enter value according to the selected type
-                                                    </FormDescription>
-                                                    <FormMessage />
-                                                </FormItem>
-                                            )}
+                                            render={({ field }) => {
+                                                const paramType = form.watch("type");
+
+                                                // Color Picker for COLOR type
+                                                if (paramType === "COLOR") {
+                                                    return (
+                                                        <FormItem>
+                                                            <FormLabel>Value (Color)</FormLabel>
+                                                            <FormControl>
+                                                                <div className="flex gap-3 items-center">
+                                                                    <input
+                                                                        type="color"
+                                                                        value={field.value || "#000000"}
+                                                                        onChange={(e) => field.onChange(e.target.value)}
+                                                                        className="h-10 w-20 rounded border border-theme-border bg-theme-card cursor-pointer"
+                                                                    />
+                                                                    <Input
+                                                                        {...field}
+                                                                        placeholder="#33FF00"
+                                                                        className="bg-theme-card border-theme-border flex-1"
+                                                                    />
+                                                                </div>
+                                                            </FormControl>
+                                                            <FormDescription>
+                                                                Select color or enter hex value
+                                                            </FormDescription>
+                                                            <FormMessage />
+                                                        </FormItem>
+                                                    );
+                                                }
+
+                                                // File Upload for BASE64 type
+                                                if (paramType === "BASE64") {
+                                                    return (
+                                                        <FormItem>
+                                                            <FormLabel>Value (Image)</FormLabel>
+                                                            <FormControl>
+                                                                <div className="space-y-3">
+                                                                    <Input
+                                                                        type="file"
+                                                                        accept="image/png,image/jpeg,image/jpg"
+                                                                        onChange={(e) => {
+                                                                            const file = e.target.files?.[0];
+                                                                            if (file) {
+                                                                                const reader = new FileReader();
+                                                                                reader.onloadend = () => {
+                                                                                    field.onChange(reader.result as string);
+                                                                                };
+                                                                                reader.readAsDataURL(file);
+                                                                            }
+                                                                        }}
+                                                                        className="bg-theme-card border-theme-border"
+                                                                    />
+                                                                    {field.value && typeof field.value === "string" && field.value.startsWith("data:image/") && (
+                                                                        <div className="rounded-lg border border-theme-border p-3 bg-theme-card">
+                                                                            <p className="text-xs text-gray-400 mb-2">Preview:</p>
+                                                                            <img
+                                                                                src={field.value}
+                                                                                alt="Preview"
+                                                                                className="max-w-full h-auto max-h-48 rounded"
+                                                                            />
+                                                                        </div>
+                                                                    )}
+                                                                </div>
+                                                            </FormControl>
+                                                            <FormDescription>
+                                                                Upload PNG, JPG, or JPEG image (converted to base64)
+                                                            </FormDescription>
+                                                            <FormMessage />
+                                                        </FormItem>
+                                                    );
+                                                }
+
+                                                // Textarea for all other types
+                                                return (
+                                                    <FormItem>
+                                                        <FormLabel>Value</FormLabel>
+                                                        <FormControl>
+                                                            <Textarea
+                                                                {...field}
+                                                                placeholder="Enter value"
+                                                                className="bg-theme-card border-theme-border min-h-[80px]"
+                                                            />
+                                                        </FormControl>
+                                                        <FormDescription>
+                                                            Enter value according to the selected type
+                                                        </FormDescription>
+                                                        <FormMessage />
+                                                    </FormItem>
+                                                );
+                                            }}
                                         />
                                         <FormField
                                             control={form.control}
@@ -370,7 +445,7 @@ export default function ParameterManagement() {
                                                         <Input
                                                             {...field}
                                                             placeholder="Describe this parameter"
-                                                            className="bg-stone-900 border-stone-800"
+                                                            className="bg-theme-card border-theme-border"
                                                         />
                                                     </FormControl>
                                                     <FormMessage />
@@ -381,7 +456,7 @@ export default function ParameterManagement() {
                                             control={form.control}
                                             name="isActive"
                                             render={({ field }) => (
-                                                <FormItem className="flex items-center justify-between rounded-lg border border-stone-800 p-4">
+                                                <FormItem className="flex items-center justify-between rounded-lg border border-theme-border p-4">
                                                     <div className="space-y-0.5">
                                                         <FormLabel className="text-base">Active</FormLabel>
                                                         <FormDescription>
@@ -402,7 +477,7 @@ export default function ParameterManagement() {
                                                 type="button"
                                                 variant="outline"
                                                 onClick={handleDialogClose}
-                                                className="border-stone-800"
+                                                className="border-theme-border"
                                             >
                                                 Cancel
                                             </Button>
@@ -422,7 +497,7 @@ export default function ParameterManagement() {
                 </div>
 
                 {/* Filters */}
-                <Card className="bg-[#0a0a0a] border-stone-800">
+                <Card className="bg-theme-card border-theme-border">
                     <CardContent className="pt-6">
                         <div className="flex gap-4">
                             <div className="flex-1 relative">
@@ -431,17 +506,17 @@ export default function ParameterManagement() {
                                     placeholder="Search parameters..."
                                     value={searchTerm}
                                     onChange={(e) => setSearchTerm(e.target.value)}
-                                    className="pl-10 bg-stone-900 border-stone-800"
+                                    className="pl-10 bg-theme-card border-theme-border"
                                 />
                             </div>
                             <Select
                                 value={filterCategory}
                                 onValueChange={(value: string) => setFilterCategory(value as ParameterCategory | "all")}
                             >
-                                <SelectTrigger className="w-48 bg-stone-900 border-stone-800">
+                                <SelectTrigger className="w-48 bg-theme-card border-theme-border">
                                     <SelectValue placeholder="Filter by category" />
                                 </SelectTrigger>
-                                <SelectContent className="bg-stone-900 border-stone-800">
+                                <SelectContent className="bg-theme-card border-theme-border">
                                     <SelectItem value="all">All Categories</SelectItem>
                                     {parameterCategories?.map((category) => (
                                         <SelectItem key={category} value={category}>
@@ -455,7 +530,7 @@ export default function ParameterManagement() {
                 </Card>
 
                 {/* Parameters Table */}
-                <Card className="bg-[#0a0a0a] border-stone-800">
+                <Card className="bg-theme-card border-theme-border">
                     <CardHeader>
                         <CardTitle>Parameters ({filteredParameters.length})</CardTitle>
                         <CardDescription>Manage all parameters that control your website's appearance</CardDescription>
@@ -470,7 +545,7 @@ export default function ParameterManagement() {
                         ) : (
                             <Table>
                                 <TableHeader>
-                                    <TableRow className="border-stone-800 hover:bg-stone-900/50">
+                                    <TableRow className="border-theme-border hover:bg-theme-card/50">
                                         <TableHead>Key</TableHead>
                                         <TableHead>Value</TableHead>
                                         <TableHead>Type</TableHead>
@@ -481,7 +556,7 @@ export default function ParameterManagement() {
                                 </TableHeader>
                                 <TableBody>
                                     {filteredParameters.map((parameter) => (
-                                        <TableRow key={parameter.id} className="border-stone-800 hover:bg-stone-900/50">
+                                        <TableRow key={parameter.id} className="border-theme-border hover:bg-theme-card/50">
                                             <TableCell className="font-mono text-sm">
                                                 {parameter.key}
                                                 {parameter.description && (
@@ -542,7 +617,7 @@ export default function ParameterManagement() {
 
                 {/* Toggle Confirmation Dialog */}
                 <Dialog open={isToggleConfirmOpen} onOpenChange={handleToggleConfirmClose}>
-                    <DialogContent className="bg-[#0a0a0a] border-stone-800 text-white">
+                    <DialogContent className="bg-theme-card border-theme-border text-white">
                         <DialogHeader>
                             <DialogTitle>Confirm Parameter Status Change</DialogTitle>
                             <DialogDescription>
@@ -551,13 +626,13 @@ export default function ParameterManagement() {
                         </DialogHeader>
                         {togglePendingParameter && (
                             <div className="space-y-3 py-4">
-                                <div className="rounded-lg bg-stone-900 border border-stone-800 p-4">
+                                <div className="rounded-lg bg-theme-card border border-theme-border p-4">
                                     <p className="text-sm text-gray-400 mb-1">Parameter</p>
                                     <p className="font-mono text-sm">
                                         {parameters.find(p => p.id === togglePendingParameter.id)?.key}
                                     </p>
                                 </div>
-                                <div className="rounded-lg bg-stone-900 border border-stone-800 p-4">
+                                <div className="rounded-lg bg-theme-card border border-theme-border p-4">
                                     <p className="text-sm text-gray-400 mb-1">Status Change</p>
                                     <div className="flex items-center gap-3">
                                         <Badge variant={togglePendingParameter.currentStatus ? "default" : "secondary"}>
@@ -581,7 +656,7 @@ export default function ParameterManagement() {
                                 type="button"
                                 variant="outline"
                                 onClick={handleToggleConfirmClose}
-                                className="border-stone-800"
+                                className="border-theme-border"
                             >
                                 Cancel
                             </Button>
