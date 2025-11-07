@@ -1,10 +1,6 @@
-import { useState, useEffect, useCallback } from 'react';
-import {
-  Parameter,
-  ParameterCategory,
-  ParameterValues,
-} from '@/interfaces/ParameterInterface';
-import { getActiveParameters, getParameterByKey } from '@/utils/parameterApi';
+import { useState, useEffect, useCallback } from "react";
+import { Parameter, ParameterCategory, ParameterValues } from "@/interfaces/ParameterInterface";
+import { getActiveParameters, getParameterByKey } from "@/utils/parameterApi";
 
 /**
  * Custom hook for accessing and managing parameters
@@ -25,82 +21,82 @@ import { getActiveParameters, getParameterByKey } from '@/utils/parameterApi';
  */
 
 interface UseParameterOptions {
-  category?: ParameterCategory;
-  key?: string;
-  autoRefresh?: boolean;
-  refreshInterval?: number; // in milliseconds
+    category?: ParameterCategory;
+    key?: string;
+    autoRefresh?: boolean;
+    refreshInterval?: number; // in milliseconds
 }
 
 interface UseParameterReturn {
-  parameters: Parameter[];
-  parameter: Parameter | null;
-  loading: boolean;
-  error: Error | null;
-  refresh: () => Promise<void>;
+    parameters: Parameter[];
+    parameter: Parameter | null;
+    loading: boolean;
+    error: Error | null;
+    refresh: () => Promise<void>;
 }
 
 /**
  * Hook to fetch and manage parameters
  */
 export function useParameter(options: UseParameterOptions = {}): UseParameterReturn {
-  const { category, key, autoRefresh = false, refreshInterval = 60000 } = options;
+    const { category, key, autoRefresh = false, refreshInterval = 60000 } = options;
 
-  const [parameters, setParameters] = useState<Parameter[]>([]);
-  const [parameter, setParameter] = useState<Parameter | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<Error | null>(null);
+    const [parameters, setParameters] = useState<Parameter[]>([]);
+    const [parameter, setParameter] = useState<Parameter | null>(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<Error | null>(null);
 
-  const fetchData = useCallback(async () => {
-    try {
-      setLoading(true);
-      setError(null);
+    const fetchData = useCallback(async () => {
+        try {
+            setLoading(true);
+            setError(null);
 
-      if (key) {
-        // Fetch single parameter by key
-        const response = await getParameterByKey(key);
-        setParameter(response.parameter);
-        setParameters([response.parameter]);
-      } else {
-        // Fetch all active parameters (optionally filtered by category)
-        const response = await getActiveParameters(category);
-        setParameters(response.parameters);
-        setParameter(response.parameters[0] || null);
-      }
-    } catch (err) {
-      setError(err instanceof Error ? err : new Error('Failed to fetch parameters'));
-      setParameters([]);
-      setParameter(null);
-    } finally {
-      setLoading(false);
-    }
-  }, [category, key]);
+            if (key) {
+                // Fetch single parameter by key
+                const response = await getParameterByKey(key);
+                setParameter(response.parameter);
+                setParameters([response.parameter]);
+            } else {
+                // Fetch all active parameters (optionally filtered by category)
+                const response = await getActiveParameters(category);
+                setParameters(response.parameters);
+                setParameter(response.parameters[0] || null);
+            }
+        } catch (err) {
+            setError(err instanceof Error ? err : new Error("Failed to fetch parameters"));
+            setParameters([]);
+            setParameter(null);
+        } finally {
+            setLoading(false);
+        }
+    }, [category, key]);
 
-  const refresh = useCallback(async () => {
-    await fetchData();
-  }, [fetchData]);
+    const refresh = useCallback(async () => {
+        await fetchData();
+    }, [fetchData]);
 
-  useEffect(() => {
-    fetchData();
-  }, [fetchData]);
+    useEffect(() => {
+        fetchData();
+    }, [fetchData]);
 
-  // Auto-refresh functionality
-  useEffect(() => {
-    if (!autoRefresh) return;
+    // Auto-refresh functionality
+    useEffect(() => {
+        if (!autoRefresh) return;
 
-    const interval = setInterval(() => {
-      fetchData();
-    }, refreshInterval);
+        const interval = setInterval(() => {
+            fetchData();
+        }, refreshInterval);
 
-    return () => clearInterval(interval);
-  }, [autoRefresh, refreshInterval, fetchData]);
+        return () => clearInterval(interval);
+    }, [autoRefresh, refreshInterval, fetchData]);
 
-  return {
-    parameters,
-    parameter,
-    loading,
-    error,
-    refresh,
-  };
+    return {
+        parameters,
+        parameter,
+        loading,
+        error,
+        refresh,
+    };
 }
 
 /**
@@ -115,22 +111,19 @@ export function useParameter(options: UseParameterOptions = {}): UseParameterRet
  * const isFeatureEnabled = useParameterValue<boolean>('feature.booking_enabled', false);
  * const maxItems = useParameterValue<number>('layout.max_items', 10);
  */
-export function useParameterValue<T = string>(
-  key: keyof ParameterValues,
-  defaultValue: T
-): T {
-  const [value, setValue] = useState<T>(defaultValue);
-  const { parameter, loading } = useParameter({ key: key as string });
+export function useParameterValue<T = string>(key: keyof ParameterValues, defaultValue: T): T {
+    const [value, setValue] = useState<T>(defaultValue);
+    const { parameter, loading } = useParameter({ key: key as string });
 
-  useEffect(() => {
-    if (!loading && parameter?.isActive) {
-      setValue((parameter.value as T) ?? defaultValue);
-    } else if (!loading) {
-      setValue(defaultValue);
-    }
-  }, [parameter, loading, defaultValue]);
+    useEffect(() => {
+        if (!loading && parameter?.isActive) {
+            setValue((parameter.value as T) ?? defaultValue);
+        } else if (!loading) {
+            setValue(defaultValue);
+        }
+    }, [parameter, loading, defaultValue]);
 
-  return value;
+    return value;
 }
 
 /**
@@ -148,39 +141,39 @@ export function useParameterValue<T = string>(
  * // Returns: { 'theme.primary_color': '#000', 'theme.secondary_color': '#fff', ... }
  */
 export function useParameterValues(keys: Array<keyof ParameterValues>) {
-  const [values, setValues] = useState<Record<string, any>>({});
-  const [loading, setLoading] = useState(true);
+    const [values, setValues] = useState<Record<string, any>>({});
+    const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchValues = async () => {
-      try {
-        setLoading(true);
-        const results: Record<string, any> = {};
-
-        await Promise.all(
-          keys.map(async (key) => {
+    useEffect(() => {
+        const fetchValues = async () => {
             try {
-              const response = await getParameterByKey(key as string);
-              if (response.parameter?.isActive) {
-                results[key as string] = response.parameter.value;
-              }
-            } catch {
-              // Silently fail for individual keys
-              results[key as string] = undefined;
+                setLoading(true);
+                const results: Record<string, any> = {};
+
+                await Promise.all(
+                    keys.map(async (key) => {
+                        try {
+                            const response = await getParameterByKey(key as string);
+                            if (response.parameter?.isActive) {
+                                results[key as string] = response.parameter.value;
+                            }
+                        } catch {
+                            // Silently fail for individual keys
+                            results[key as string] = undefined;
+                        }
+                    })
+                );
+
+                setValues(results);
+            } finally {
+                setLoading(false);
             }
-          })
-        );
+        };
 
-        setValues(results);
-      } finally {
-        setLoading(false);
-      }
-    };
+        fetchValues();
+    }, [keys.join(",")]);
 
-    fetchValues();
-  }, [keys.join(',')]);
-
-  return { values, loading };
+    return { values, loading };
 }
 
 /**
@@ -194,25 +187,22 @@ export function useParameterValues(keys: Array<keyof ParameterValues>) {
  * // Returns: { 'theme.primary_color': '#000', 'theme.secondary_color': '#fff', ... }
  */
 export function useParametersByCategory(category: ParameterCategory) {
-  const [values, setValues] = useState<Record<string, any>>({});
-  const { parameters, loading } = useParameter({ category });
+    const [values, setValues] = useState<Record<string, any>>({});
+    const { parameters, loading } = useParameter({ category });
 
-  useEffect(() => {
-    if (!loading && parameters.length > 0) {
-      const paramMap = parameters.reduce(
-        (acc, param) => {
-          if (param.isActive) {
-            acc[param.key] = param.value;
-          }
-          return acc;
-        },
-        {} as Record<string, any>
-      );
-      setValues(paramMap);
-    }
-  }, [parameters, loading]);
+    useEffect(() => {
+        if (!loading && parameters.length > 0) {
+            const paramMap = parameters.reduce((acc, param) => {
+                if (param.isActive) {
+                    acc[param.key] = param.value;
+                }
+                return acc;
+            }, {} as Record<string, any>);
+            setValues(paramMap);
+        }
+    }, [parameters, loading]);
 
-  return { values, loading };
+    return { values, loading };
 }
 
 /**
@@ -226,6 +216,6 @@ export function useParametersByCategory(category: ParameterCategory) {
  * const isChatEnabled = useFeatureFlag('chat_support_enabled');
  */
 export function useFeatureFlag(featureKey: string): boolean {
-  const fullKey = `feature.${featureKey}` as keyof ParameterValues;
-  return useParameterValue<boolean>(fullKey, false);
+    const fullKey = `feature.${featureKey}` as keyof ParameterValues;
+    return useParameterValue<boolean>(fullKey, false);
 }

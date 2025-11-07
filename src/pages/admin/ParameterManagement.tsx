@@ -1,13 +1,6 @@
-import { useState, useEffect, useCallback } from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
     Dialog,
     DialogContent,
@@ -16,20 +9,26 @@ import {
     DialogHeader,
     DialogTitle,
 } from "@/components/ui/dialog";
-import { useToast } from "@/components/ui/use-toast";
-import { Badge } from "@/components/ui/badge";
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Textarea } from "@/components/ui/textarea";
-import { Settings, Edit, Trash2, Search, RefreshCw, AlertCircle, CheckCircle } from "lucide-react";
-import { Parameter, ParameterType, ParameterCategory, UpdateParameterRequest } from "@/interfaces/ParameterInterface";
+import { useToast } from "@/components/ui/use-toast";
+import { Parameter, ParameterCategory, ParameterType, UpdateParameterRequest } from "@/interfaces/ParameterInterface";
 import {
-    getAllParameters,
-    updateParameter,
-    deleteParameter,
-    toggleParameterStatus,
-    getParametersByCategory,
     getAllCategories,
+    getAllParameters,
+    getParametersByCategory,
+    toggleParameterStatus,
+    updateParameter
 } from "@/utils/parameterApi";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { AlertCircle, CheckCircle, Edit, RefreshCw, Search, Settings } from "lucide-react";
+import { useCallback, useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 
 // Validation schema for parameter form
 const parameterSchema = z.object({
@@ -54,7 +53,9 @@ export default function ParameterManagement() {
     const [filterCategory, setFilterCategory] = useState<ParameterCategory | "all">("all");
     const [parameterCategories, setParameterCategories] = useState<[ParameterCategory]>();
     const [isToggleConfirmOpen, setIsToggleConfirmOpen] = useState(false);
-    const [togglePendingParameter, setTogglePendingParameter] = useState<{ id: string; currentStatus: boolean } | null>(null);
+    const [togglePendingParameter, setTogglePendingParameter] = useState<{ id: string; currentStatus: boolean } | null>(
+        null
+    );
     const { toast } = useToast();
 
     const form = useForm<ParameterFormData>({
@@ -171,25 +172,6 @@ export default function ParameterManagement() {
         setIsDialogOpen(true);
     };
 
-    const handleDelete = async (parameterId: string) => {
-        if (!confirm("Are you sure you want to delete this parameter?")) return;
-
-        try {
-            await deleteParameter(parameterId);
-            toast({
-                title: "Success",
-                description: "Parameter deleted successfully",
-            });
-            fetchParameters();
-        } catch (error) {
-            toast({
-                title: "Error",
-                description: error instanceof Error ? error.message : "Failed to delete parameter",
-                variant: "destructive",
-            });
-        }
-    };
-
     const handleToggleClick = (parameterId: string, currentStatus: boolean) => {
         setTogglePendingParameter({ id: parameterId, currentStatus });
         setIsToggleConfirmOpen(true);
@@ -278,18 +260,17 @@ export default function ParameterManagement() {
                                 </DialogHeader>
                                 <Form {...form}>
                                     <form
-                                        onSubmit={form.handleSubmit(
-                                            onSubmit,
-                                            (errors) => {
-                                                console.error("Form validation failed:", errors);
-                                            }
-                                        )}
+                                        onSubmit={form.handleSubmit(onSubmit, (errors) => {
+                                            console.error("Form validation failed:", errors);
+                                        })}
                                         className="space-y-4"
                                     >
                                         {/* Debug: Show form errors */}
                                         {Object.keys(form.formState.errors).length > 0 && (
                                             <div className="bg-red-900/20 border border-red-500 rounded p-3 text-sm">
-                                                <p className="font-semibold text-red-400 mb-1">Form Validation Errors:</p>
+                                                <p className="font-semibold text-red-400 mb-1">
+                                                    Form Validation Errors:
+                                                </p>
                                                 <ul className="list-disc list-inside text-red-300">
                                                     {Object.entries(form.formState.errors).map(([field, error]) => (
                                                         <li key={field}>
@@ -333,9 +314,7 @@ export default function ParameterManagement() {
                                                             readOnly
                                                         />
                                                     </FormControl>
-                                                    <FormDescription>
-                                                        Data type of the parameter
-                                                    </FormDescription>
+                                                    <FormDescription>Data type of the parameter</FormDescription>
                                                     <FormMessage />
                                                 </FormItem>
                                             )}
@@ -389,23 +368,29 @@ export default function ParameterManagement() {
                                                                             if (file) {
                                                                                 const reader = new FileReader();
                                                                                 reader.onloadend = () => {
-                                                                                    field.onChange(reader.result as string);
+                                                                                    field.onChange(
+                                                                                        reader.result as string
+                                                                                    );
                                                                                 };
                                                                                 reader.readAsDataURL(file);
                                                                             }
                                                                         }}
                                                                         className="bg-theme-card border-theme-border"
                                                                     />
-                                                                    {field.value && typeof field.value === "string" && field.value.startsWith("data:image/") && (
-                                                                        <div className="rounded-lg border border-theme-border p-3 bg-theme-card">
-                                                                            <p className="text-xs text-gray-400 mb-2">Preview:</p>
-                                                                            <img
-                                                                                src={field.value}
-                                                                                alt="Preview"
-                                                                                className="max-w-full h-auto max-h-48 rounded"
-                                                                            />
-                                                                        </div>
-                                                                    )}
+                                                                    {field.value &&
+                                                                        typeof field.value === "string" &&
+                                                                        field.value.startsWith("data:image/") && (
+                                                                            <div className="rounded-lg border border-theme-border p-3 bg-theme-card">
+                                                                                <p className="text-xs text-gray-400 mb-2">
+                                                                                    Preview:
+                                                                                </p>
+                                                                                <img
+                                                                                    src={field.value}
+                                                                                    alt="Preview"
+                                                                                    className="max-w-full h-auto max-h-48 rounded"
+                                                                                />
+                                                                            </div>
+                                                                        )}
                                                                 </div>
                                                             </FormControl>
                                                             <FormDescription>
@@ -440,7 +425,11 @@ export default function ParameterManagement() {
                                                                                     setJsonError(null);
                                                                                 }
                                                                             } catch (err) {
-                                                                                setJsonError(err instanceof Error ? err.message : "Invalid JSON");
+                                                                                setJsonError(
+                                                                                    err instanceof Error
+                                                                                        ? err.message
+                                                                                        : "Invalid JSON"
+                                                                                );
                                                                             }
                                                                         }}
                                                                     />
@@ -450,12 +439,14 @@ export default function ParameterManagement() {
                                                                             {jsonError}
                                                                         </p>
                                                                     )}
-                                                                    {!jsonError && field.value && field.value.trim() && (
-                                                                        <p className="text-sm text-green-500 flex items-center gap-1">
-                                                                            <CheckCircle className="w-4 h-4" />
-                                                                            Valid JSON
-                                                                        </p>
-                                                                    )}
+                                                                    {!jsonError &&
+                                                                        field.value &&
+                                                                        field.value.trim() && (
+                                                                            <p className="text-sm text-green-500 flex items-center gap-1">
+                                                                                <CheckCircle className="w-4 h-4" />
+                                                                                Valid JSON
+                                                                            </p>
+                                                                        )}
                                                                 </div>
                                                             </FormControl>
                                                             <FormDescription>
@@ -491,7 +482,9 @@ export default function ParameterManagement() {
                                                                                     setUrlError(null);
                                                                                 }
                                                                             } catch {
-                                                                                setUrlError("Invalid URL format (must include https:// or http://)");
+                                                                                setUrlError(
+                                                                                    "Invalid URL format (must include https:// or http://)"
+                                                                                );
                                                                             }
                                                                         }}
                                                                     />
@@ -657,7 +650,10 @@ export default function ParameterManagement() {
                                 </TableHeader>
                                 <TableBody>
                                     {filteredParameters.map((parameter) => (
-                                        <TableRow key={parameter.id} className="border-theme-border hover:bg-theme-card/50">
+                                        <TableRow
+                                            key={parameter.id}
+                                            className="border-theme-border hover:bg-theme-card/50"
+                                        >
                                             <TableCell className="font-mono text-sm">
                                                 {parameter.key}
                                                 {parameter.description && (
@@ -690,23 +686,9 @@ export default function ParameterManagement() {
                                                 />
                                             </TableCell>
                                             <TableCell className="text-right">
-                                                <div className="flex justify-end gap-2">
-                                                    <Button
-                                                        variant="ghost"
-                                                        size="sm"
-                                                        onClick={() => handleEdit(parameter)}
-                                                    >
-                                                        <Edit className="w-4 h-4" />
-                                                    </Button>
-                                                    <Button
-                                                        variant="ghost"
-                                                        size="sm"
-                                                        onClick={() => handleDelete(parameter.id)}
-                                                        className="text-red-500 hover:text-red-400"
-                                                    >
-                                                        <Trash2 className="w-4 h-4" />
-                                                    </Button>
-                                                </div>
+                                                <Button variant="ghost" size="sm" onClick={() => handleEdit(parameter)}>
+                                                    <Edit className="w-4 h-4" />
+                                                </Button>
                                             </TableCell>
                                         </TableRow>
                                     ))}
@@ -730,7 +712,7 @@ export default function ParameterManagement() {
                                 <div className="rounded-lg bg-theme-card border border-theme-border p-4">
                                     <p className="text-sm text-gray-400 mb-1">Parameter</p>
                                     <p className="font-mono text-sm">
-                                        {parameters.find(p => p.id === togglePendingParameter.id)?.key}
+                                        {parameters.find((p) => p.id === togglePendingParameter.id)?.key}
                                     </p>
                                 </div>
                                 <div className="rounded-lg bg-theme-card border border-theme-border p-4">
@@ -740,14 +722,17 @@ export default function ParameterManagement() {
                                             {togglePendingParameter.currentStatus ? "Active" : "Inactive"}
                                         </Badge>
                                         <span className="text-gray-400">→</span>
-                                        <Badge variant={!togglePendingParameter.currentStatus ? "default" : "secondary"}>
+                                        <Badge
+                                            variant={!togglePendingParameter.currentStatus ? "default" : "secondary"}
+                                        >
                                             {!togglePendingParameter.currentStatus ? "Active" : "Inactive"}
                                         </Badge>
                                     </div>
                                 </div>
                                 <div className="rounded-lg bg-yellow-900/20 border border-yellow-500/50 p-4">
                                     <p className="text-sm text-yellow-200">
-                                        ⚠️ This will {togglePendingParameter.currentStatus ? "disable" : "enable"} this parameter on the live website immediately.
+                                        ⚠️ This will {togglePendingParameter.currentStatus ? "disable" : "enable"} this
+                                        parameter on the live website immediately.
                                     </p>
                                 </div>
                             </div>
