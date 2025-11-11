@@ -8,7 +8,7 @@ import { useFeatureFlag, useParameterValue } from "@/hooks/useParameter";
  * Controlled by feature flag and dismissible by users
  */
 export const PromotionalBanner: React.FC = () => {
-    const isEnabled = useFeatureFlag("promotional_banner_enabled");
+    const isEnabled = useFeatureFlag("promotional_banner_enabled", false);
     const promotionalMessage = useParameterValue<string>("content.promotional_message", "");
     const [isDismissed, setIsDismissed] = useState(false);
 

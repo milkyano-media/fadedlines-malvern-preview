@@ -80,8 +80,8 @@ export interface ParameterValues {
     "theme.font_family"?: string;
 
     // Branding parameters (Phase 1 & 2)
-    "branding.logo_url"?: string;
-    "branding.logo_url_dark"?: string;
+    "branding.logo"?: string;
+    "branding.logo_dark"?: string;
     "branding.company_name"?: string;
     "branding.company_tagline"?: string;
     "branding.tagline"?: string; // legacy

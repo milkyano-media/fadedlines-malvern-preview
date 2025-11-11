@@ -33,6 +33,10 @@ export default function Contacts() {
     const [status, setStatus] = useState("loading");
     const emailParameter = useParameterValue<string>("contact.email", "dejan@fadedlinesbarbershop.com");
     const phoneNumberParameter = useParameterValue<string>("contact.phone_number", "+6135 249 543");
+    const instagramLinkParameter = useParameterValue<string>(
+        "contact.instagram_url",
+        "https://www.instagram.com/fadedlinesbarbershop"
+    );
 
     const sendEmail = (values: z.infer<typeof formSchema>) => {
         setIsLoading(true);
@@ -313,7 +317,7 @@ export default function Contacts() {
                             </div>
                         </a>
                         <a
-                            href="https://www.instagram.com/fadedlinesbarbershop"
+                            href={instagramLinkParameter}
                             className="bg-[#33FF00] text-black rounded-full p-4 flex gap-2 w-96"
                         >
                             <svg className="w-12" viewBox="0 0 73 72" fill="none" xmlns="http://www.w3.org/2000/svg">

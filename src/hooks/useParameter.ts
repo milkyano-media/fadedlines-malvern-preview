@@ -215,7 +215,8 @@ export function useParametersByCategory(category: ParameterCategory) {
  * const isBookingEnabled = useFeatureFlag('booking_enabled');
  * const isChatEnabled = useFeatureFlag('chat_support_enabled');
  */
-export function useFeatureFlag(featureKey: string): boolean {
+export function useFeatureFlag(featureKey: string, defaultValue: boolean): boolean {
     const fullKey = `feature.${featureKey}` as keyof ParameterValues;
-    return useParameterValue<boolean>(fullKey, false);
+    const result = useParameterValue<string>(fullKey, defaultValue.toString());
+    return result === "true";
 }

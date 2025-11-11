@@ -1,7 +1,6 @@
+import { useFeatureFlag, useParameterValue } from "@/hooks/useParameter";
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
-import { useFeatureFlag } from "@/hooks/useParameter";
-import { useParameterValue } from "@/hooks/useParameter";
 
 interface BookingCTAProps {
     children?: React.ReactNode;
@@ -24,7 +23,7 @@ export const BookingCTA: React.FC<BookingCTAProps> = ({
     customLink,
 }) => {
     const location = useLocation();
-    const isBookingEnabled = useFeatureFlag("booking_enabled");
+    const isBookingEnabled = useFeatureFlag("booking_enabled", true);
     const ctaText = useParameterValue<string>("content.cta_primary_text", "BOOK NOW");
 
     // Generate booking link based on current path (handle /meta routes)

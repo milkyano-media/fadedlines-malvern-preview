@@ -4,25 +4,25 @@ import Instagram from "@/assets/web/icons/Instagram.svg";
 import Logo from "@/assets/web/icons/logo.svg";
 import Tiktok from "@/assets/web/icons/Tiktok.svg";
 import Youtube from "@/assets/web/icons/Youtube.svg";
-import { useParameterValue } from "@/hooks/useParameter";
+import { useFeatureFlag, useParameterValue } from "@/hooks/useParameter";
 import { generateLink } from "@/pages/web/Home";
+import { useTheme } from "@/ThemeProvider";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
-interface OpeningHour {
-    Monday: string;
-    Tuesday: string;
-    Wednesday: string;
-    Thursday: string;
-    Friday: string;
-    Saturday: string;
-    Sunday: string;
+interface OpeningTime {
+    day: string;
+    hour: string;
 }
 
 const WebFooter: React.FC = () => {
     // Fetch footer parameters
     const footerTagline = useParameterValue<string>("content.footer_tagline", "Your style, our passion");
-    const logoUrl = useParameterValue<string>("branding.logo_url", "");
+    const { theme } = useTheme();
+    const logoUrl = useParameterValue<string>("branding.logo", "");
+    const logoUrlDark = useParameterValue<string>("branding.logo_dark", "");
+    const currentLogo = theme === "dark" && logoUrlDark ? logoUrlDark : logoUrl || null;
+    const googleAddressParameter = useParameterValue<string>("contact.google_maps_url", "https://g.co/kgs/sdqFwMj");
     const addressParameter = useParameterValue<string>(
         "contact.address",
         "55 PORTMAN ST; OAKLEIGH VIC 3166; AUSTRALIA"
@@ -37,19 +37,10 @@ const WebFooter: React.FC = () => {
     );
     const openingHoursParameter = useParameterValue<string>(
         "contact.business_hours",
-        `
-{
-    "Monday": "12 AM - 9 PM",
-    "Tuesday": "12 AM - 9 PM",
-    "Wednesday": "12 AM - 9 PM",
-    "Thursday": "10 AM - 9 PM",
-    "Friday": "10 AM - 9 PM",
-    "Saturday": "9 AM - 8 PM",
-    "Sunday": "6 AM - 12 PM"
-}
-`
+        `[{"day":"Monday","hour":"12 AM - 9 PM"},{"day":"Tuesday","hour":"12 AM - 9 PM"},{"day":"Wednesday","hour":"12 AM - 9 PM"},{"day":"Thursday","hour":"10 AM - 9 PM"},{"day":"Friday","hour":"10 AM - 9 PM"},{"day":"Saturday","hour":"9 AM - 8 PM"},{"day":"Sunday","hour":"6 AM - 12 PM"}]`
     );
-    const [openingHours, setOpeningHours] = useState<OpeningHour>();
+    const ctaTextParameter = useParameterValue<string>("content.cta_primary_text", "Book Now");
+    const [openingHours, setOpeningHours] = useState<[OpeningTime]>();
     useEffect(() => {
         try {
             const parsedOpeningHoursParameter = JSON.parse(openingHoursParameter);
@@ -58,6 +49,17 @@ const WebFooter: React.FC = () => {
             // ignored
         }
     }, [openingHoursParameter]);
+    const bookEnabledParameter = useFeatureFlag("booking_enabled", true);
+    const ctaStyle = function () {
+        let result =
+            "bg-[#454545] border-[0.5px] border-white text-2xl text-[var(--primary-color)] font-bold px-20 md:px-40 py-7 w-max self-center hover:bg-[#454545]/80 rounded-md transition-colors";
+
+        if (!bookEnabledParameter) {
+            result += " opacity-50 cursor-not-allowed";
+        }
+
+        return result;
+    };
 
     return (
         <footer className="flex flex-col">
@@ -75,11 +77,9 @@ const WebFooter: React.FC = () => {
                         <h2>SAVE TIME AND</h2>
                         <h1 className="text-[var(--primary-color)]">BOOK NOW</h1>
                     </div>
-                    {generateLink(
-                        <span className="bg-[#454545] border-[0.5px] border-white text-2xl text-[var(--primary-color)] font-bold px-20 md:px-40 py-7 w-max self-center hover:bg-[#454545]/80 rounded-md transition-colors">
-                            BOOK NOW
-                        </span>
-                    )}
+                    <span className={ctaStyle()}>
+                        {generateLink(ctaTextParameter, !bookEnabledParameter, "Booking Unavailable")}
+                    </span>
 
                     <div className="flex gap-4 md:gap-10">
                         <p>
@@ -102,7 +102,7 @@ const WebFooter: React.FC = () => {
                 <div className="container mx-auto py-12 flex flex-col md:flex-row  justify-between relative z-0">
                     <div className="flex flex-col pb-12 md:py-0 gap-10">
                         <div className="flex flex-col gap-3">
-                            <img src={logoUrl || Logo} alt="barber shop faded lines" className="w-[20rem] h-auto" />
+                            <img src={currentLogo || Logo} alt="barber shop faded lines" className="w-[20rem] h-auto" />
                             {footerTagline && <p className="text-sm text-stone-400 italic">{footerTagline}</p>}
                         </div>
                         <div className="flex flex-col gap-4 relative z-[99999999]">
@@ -189,7 +189,7 @@ const WebFooter: React.FC = () => {
                             <h3 className="text-[var(--primary-color)] mb-4">Address</h3>
                             <ul className="flex flex-col font-light gap-2 text-stone-400 mb-10">
                                 <li>
-                                    <Link to="https://g.co/kgs/sdqFwMj" target="_blank" className="hover:text-white">
+                                    <Link to={googleAddressParameter} target="_blank" className="hover:text-white">
                                         {addressParameter}
                                     </Link>
                                 </li>
@@ -197,14 +197,14 @@ const WebFooter: React.FC = () => {
                             <h3 className="text-[var(--primary-color)] mb-4">Hours</h3>
                             <ul className="flex flex-col font-light gap-2 text-stone-400">
                                 {openingHours &&
-                                    Object.entries(openingHours).map(([key, value]) => (
-                                        <li key={key}>
+                                    openingHours.map((oh) => (
+                                        <li key={oh.day}>
                                             <Link
-                                                to="https://g.co/kgs/sdqFwMj"
+                                                to={googleAddressParameter}
                                                 target="_blank"
                                                 className="hover:text-white"
                                             >
-                                                {key} {value}
+                                                {oh.day} {oh.hour}
                                             </Link>
                                         </li>
                                     ))}
