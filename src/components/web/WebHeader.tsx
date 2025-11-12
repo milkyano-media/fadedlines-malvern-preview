@@ -106,7 +106,7 @@ const Header: React.FC = () => {
     return (
         <header
             ref={headerRef}
-            className="text-white shadow-lg shadow-[var(--primary-color)]/10 border-b-[0.5px] border-[var(--primary-color)] z-50 py-4 sticky top-0"
+            className="text-white shadow-lg shadow-[var(--primary-color)]/10 border-b-[0.5px] border-[var(--border-color)] z-50 py-4 sticky top-0"
             style={{
                 marginBottom: `-${height}px`,
                 background: "linear-gradient(180deg, rgba(3, 18, 13, 0.75) 14.29%, rgba(3, 18, 13, 0.6) 100%)",

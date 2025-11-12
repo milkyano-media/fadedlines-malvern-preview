@@ -135,17 +135,18 @@ export default function Careers() {
                 <div className="top-0 absolute w-full h-full object-cover z-0 bg-gradient-to-b from-black/80 to-black" />
                 <div className="flex flex-col justify-center items-center text-center gap-6 z-10">
                     <div className="flex flex-col mb-12">
-                        <h2 className="text-[#33FF00]">JOIN THE BEST</h2>
+                        <h2 className="text-[var(--text-color-primary)]">JOIN THE BEST</h2>
                         <h2>BARBERSHOP IN MELBOURNE</h2>
                         <sub className="mt-6">
-                            Are you qualified to be in our <span className="text-[#33FF00]">team?</span>
+                            Are you qualified to be in our{" "}
+                            <span className="text-[var(--text-color-primary)]">team?</span>
                         </sub>
                     </div>
 
                     <svg className="w-7 mt-20" viewBox="0 0 55 30" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path
                             d="M50.582 0.216618L54.9987 4.63745L30.9279 28.7166C30.5422 29.1048 30.0835 29.4128 29.5783 29.623C29.0731 29.8332 28.5313 29.9414 27.9841 29.9414C27.4369 29.9414 26.8951 29.8332 26.3899 29.623C25.8847 29.4128 25.4261 29.1048 25.0404 28.7166L0.957032 4.63745L5.3737 0.220782L27.9779 22.8208L50.582 0.216618Z"
-                            fill="#33FF00"
+                            fill="var(--primary-color)"
                         />
                     </svg>
                 </div>
@@ -252,7 +253,7 @@ export default function Careers() {
                                     )}
                                 />
                                 <Button
-                                    className="w-full bg-[#33FF00] rounded-xl text-black py-7 text-xl"
+                                    className="w-full bg-[var(--primary-color)] rounded-xl text-black py-7 text-xl"
                                     type="submit"
                                 >
                                     CONTINUE
@@ -289,7 +290,7 @@ export default function Careers() {
                     <div className="flex flex-col gap-4 items-center">
                         <h3 className="text-3xl">👑</h3>
                         <h4>
-                            <span className="text-transparent bg-gradient-to-r from-[#00FF29]  to-[#B2FFBF] bg-clip-text">
+                            <span className="text-transparent bg-gradient-to-r from-[var(--text-color-primary)] to-[#B2FFBF] bg-clip-text">
                                 After
                             </span>{" "}
                             working with us{" "}

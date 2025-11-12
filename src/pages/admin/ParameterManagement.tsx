@@ -340,7 +340,7 @@ export default function ParameterManagement() {
                                                                     />
                                                                     <Input
                                                                         {...field}
-                                                                        placeholder="#33FF00"
+                                                                        placeholder="var(--primary-color)"
                                                                         className="bg-theme-card border-theme-border flex-1"
                                                                     />
                                                                 </div>

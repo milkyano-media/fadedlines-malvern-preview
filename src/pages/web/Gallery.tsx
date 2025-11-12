@@ -10,7 +10,6 @@ import { Link, useLocation } from "react-router-dom";
 export default function GalleriesPage() {
     const ctaTextParameter = useParameterValue<string>("content.cta_primary_text", "Book Now");
     const bookEnabledParameter = useFeatureFlag("booking_enabled", true);
-    const backgroundParameter = useParameterValue<string>("theme.background_color", "#000000");
 
     localStorage.removeItem("booking_source");
 
@@ -95,15 +94,17 @@ export default function GalleriesPage() {
                 <meta name="twitter:card" content="summary_large_img" />
             </Helmet>
 
-            <div className={`flex flex-col text-stone-50 bg-black w-full relative mt-10 bg-theme-bg`}>
+            <div className="flex flex-col text-stone-50 bg-black w-full relative mt-10 bg-theme-bg">
                 <section className="py-12 pt-32 px-0 container pr-0  md:pr-4 relative z-30 flex gap-12 justify-center items-center flex-col md:flex-row overflow-hidden">
                     <div className="w-full md:w-10/12 flex flex-col justify-end md:pb-24 h-full">
-                        <h3 className="text-3xl md:text-4xl font-extrabold tracking-wider flex flex-col  md:gap-2 text-center md:text-right">
-                            <span>BE OUR NEXT</span>
-                            <span className="text-transparent bg-[#33FF00] bg-clip-text">MASTERPIECE</span>
+                        <h3 className="text-3xl md:text-4xl font-extrabold tracking-wider flex flex-col md:gap-2 text-center md:text-right">
+                            <span className="text-[var(--text-color-secondary)]">BE OUR NEXT</span>
+                            <span className="text-transparent bg-[var(--text-color-primary)] bg-clip-text">
+                                MASTERPIECE
+                            </span>
                         </h3>
                         <Button
-                            className="bg-[#454545] border-[0.5px] border-white text-2xl text-[#33FF00] font-bold px-16 py-7 w-max self-center md:self-end mt-6 hover:bg-[#454545]/80"
+                            className="bg-[#454545] border-[0.5px] border-white text-2xl text-[var(--text-color-primary)] font-bold px-16 py-7 w-max self-center md:self-end mt-6 hover:bg-[#454545]/80"
                             disabled={!bookEnabledParameter}
                         >
                             {generateLink(ctaTextParameter)}
@@ -130,10 +131,12 @@ export default function GalleriesPage() {
                 <section className="relative z-[99999999] pb-[10rem] md:pb-[30rem] pt-12">
                     <section className=" w-full relative flex flex-col items-center text-center  container">
                         <div className="w-full px-4 md:px-0 flex flex-col gap-4 ">
-                            <h3 className="text-2xl md:text-3xl tracking-wider font-extrabold w-full md:w-1/3 mx-auto font-poppins">
-                                WE’VE DONE ALL
+                            <h3 className="text-[var(--text-color-secondary)] text-2xl md:text-3xl tracking-wider font-extrabold w-full md:w-1/3 mx-auto font-poppins">
+                                WE'VE DONE ALL
                                 <br />
-                                <span className="text-transparent bg-[#33FF00] bg-clip-text">YOU EVER NEED</span>
+                                <span className="text-transparent bg-[var(--text-color-primary)] bg-clip-text">
+                                    YOU EVER NEED
+                                </span>
                             </h3>
                         </div>
                     </section>
