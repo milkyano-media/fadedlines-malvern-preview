@@ -221,6 +221,8 @@ export default function ParameterManagement() {
             [ParameterCategory.THEME]: "bg-purple-500/10 text-purple-500",
             [ParameterCategory.CONTENT]: "bg-yellow-500/10 text-yellow-500",
             [ParameterCategory.FEATURE_FLAG]: "bg-red-500/10 text-red-500",
+            [ParameterCategory.BRANDING]: "bg-orange-500/10 text-orange-500",
+            [ParameterCategory.CONTACT]: "bg-amber-500/10 text-amber-500",
         };
         return colors[category] || "bg-gray-500/10 text-gray-500";
     };
