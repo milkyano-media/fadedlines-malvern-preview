@@ -78,6 +78,7 @@ export interface ParameterValues {
     "theme.text_color_secondary"?: string;
     "theme.text_color"?: string; // legacy
     "theme.font_family"?: string;
+    "theme.shadow_color"?: string;
 
     // Branding parameters (Phase 1 & 2)
     "branding.logo"?: string;

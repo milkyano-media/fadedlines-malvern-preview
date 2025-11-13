@@ -284,7 +284,7 @@ export default function Home() {
                     <Accordion
                         type="single"
                         collapsible
-                        className="flex border pb-12 border-[var(--border-color)] rounded-[36px] p-12 pt-6 flex-col gap-8 bg-[#101010] shadow-[0px_4px_39px_31px_rgba(0,244,24,0.1)] font-light"
+                        className="flex border pb-12 border-[var(--border-color)] rounded-[36px] p-12 pt-6 flex-col gap-8 bg-[#101010] shadow-[var(--shadow-color)] shadow-super-large font-light"
                     >
                         {faqs.map((faq) => (
                             <AccordionItem

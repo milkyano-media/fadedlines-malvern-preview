@@ -264,9 +264,9 @@ export default function Careers() {
                 </section>
                 <section ref={ref}>
                     <div className=" w-full flex justify-center relative">
-                        <div className="h-[10rem] w-[1px] bg-[#086600] z-0" />
+                        <div className="h-[10rem] w-[1px] bg-[var(--primary-color-20)] z-0" />
                         <motion.div
-                            className="absolute h-[10rem] w-[2px] bg-gradient-to-b from-[#096601] to-[#15ff00] shadow-[0px_0px_70px_2px_#15ff00] origin-top z-10"
+                            className="absolute h-[10rem] w-[2px] bg-gradient-to-b from-[var(--primary-color-20)] to-[var(--primary-color-50)] shadow-tiny shadow-[var(--primary-color-50)] origin-top z-10"
                             style={{ scaleY }}
                         />
                     </div>
@@ -290,7 +290,7 @@ export default function Careers() {
                     <div className="flex flex-col gap-4 items-center">
                         <h3 className="text-3xl">👑</h3>
                         <h4>
-                            <span className="text-transparent bg-gradient-to-r from-[var(--text-color-primary)] to-[#B2FFBF] bg-clip-text">
+                            <span className="text-transparent bg-gradient-to-r from-[var(--text-color-primary)] to-[var(--text-color-primary-85)] bg-clip-text">
                                 After
                             </span>{" "}
                             working with us{" "}

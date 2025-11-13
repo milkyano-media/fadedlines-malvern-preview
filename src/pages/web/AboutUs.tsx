@@ -144,7 +144,7 @@ export default function AboutUs() {
                         />
                     </svg>
 
-                    <h1 className="text-transparent bg-gradient-to-b from-[var(--primary-color)] to-[#24B300] bg-clip-text">
+                    <h1 className="text-transparent bg-gradient-to-b from-[var(--primary-color)] to-[var(--primary-color-35)] bg-clip-text">
                         Not Luck Of <br />
                         The Draw.
                     </h1>

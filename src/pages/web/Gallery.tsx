@@ -121,9 +121,9 @@ export default function GalleriesPage() {
                 </section>
 
                 <div className=" w-full flex justify-center py-12 relative">
-                    <div className="h-40 w-[1px] bg-[#086600] z-0" />
+                    <div className="h-40 w-[1px] bg-[var(--primary-color-20)] z-0" />
                     <motion.div
-                        className="absolute h-[18rem] w-[2px] bg-gradient-to-b from-[#096601] to-[#15ff00] shadow-[0px_0px_70px_2px_#15ff00] origin-top z-10"
+                        className="absolute h-[18rem] w-[2px] bg-gradient-to-b from-[var(--primary-color-20)] to-[var(--primary-color-50)] shadow-tiny shadow-[var(--primary-color-50)] origin-top z-10"
                         style={{ scaleY }}
                     />
                 </div>
