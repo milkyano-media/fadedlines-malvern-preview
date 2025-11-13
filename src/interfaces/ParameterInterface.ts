@@ -104,6 +104,7 @@ export interface ParameterValues {
     "content.booking_success_message"?: string;
     "content.about_us_headline"?: string;
     "content.footer_tagline"?: string;
+    "content.faqs"?: string;
 
     // Feature flags (Phase 1)
     "feature.booking_enabled"?: boolean;

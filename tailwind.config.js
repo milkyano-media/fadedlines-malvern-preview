@@ -55,7 +55,7 @@ module.exports = {
                 "theme-primary": "var(--primary-color)",
                 "theme-secondary": "var(--secondary-color)",
                 "theme-bg": "var(--background-color)",
-                "theme-card": "var(--card-background-color)",
+                "theme-card": "#0a0a0a",
                 "theme-border": "var(--border-color)",
                 "theme-text": "var(--text-color-primary)",
                 "theme-text-muted": "var(--text-color-secondary)",
