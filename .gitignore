@@ -28,4 +28,7 @@ dist-ssr
 src/assets/landing/videos/*
 
 bun.lockb
+
+# Claude
 .claude
+CLAUDE.md

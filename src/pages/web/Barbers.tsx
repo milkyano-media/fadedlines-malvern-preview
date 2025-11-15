@@ -1,20 +1,16 @@
-import Amir from "@/assets/web/barbers/amir.png";
-import Anthony from "@/assets/web/barbers/anthony.png";
-import Christos from "@/assets/web/barbers/christos.png";
-import Dejan from "@/assets/web/barbers/dejan.png";
-import Emman from "@/assets/web/barbers/emman.png";
-import Jay from "@/assets/web/barbers/jay.png";
-import Josh from "@/assets/web/barbers/josh.png";
-import Niko from "@/assets/web/barbers/niko.png";
-import Noah from "@/assets/web/barbers/noah.png";
-import Rayhan from "@/assets/web/barbers/rayhan.png";
-import Wyatt from "@/assets/web/barbers/wyatt.png";
 import BgHero2 from "@/assets/web/home/hero.svg";
 import { Button } from "@/components/ui/button";
 import Layout from "@/components/web/WebLayout";
-import { useEffect } from "react";
+import { useParameterValue } from "@/hooks/useParameter";
+import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { Link, useLocation } from "react-router-dom";
+
+interface Barbers {
+    imageUrl: string;
+    link: string;
+    landing: boolean;
+}
 
 export default function Barbers() {
     localStorage.removeItem("booking_source");
@@ -87,64 +83,71 @@ export default function Barbers() {
             return squareLink;
         }
     };
+    const barbersParameter = useParameterValue<string>(
+        "content.barber_list",
+        JSON.stringify([
+            {
+                imageUrl: "https://s3.milkyano.com/milkyano/fadedlines-oakleigh/barbers/amir.png",
+                link: generateRoute("/amir"),
+                landing: true,
+            },
+            {
+                imageUrl: "https://s3.milkyano.com/milkyano/fadedlines-oakleigh/barbers/rayhan.png",
+                link: generateRoute("/rayhan"),
+                landing: true,
+            },
+            {
+                imageUrl: "https://s3.milkyano.com/milkyano/fadedlines-oakleigh/barbers/anthony.png",
+                link: generateRoute("/anthony"),
+                landing: true,
+            },
+            {
+                imageUrl: "https://s3.milkyano.com/milkyano/fadedlines-oakleigh/barbers/josh.png",
+                link: generateRoute("/josh"),
+                landing: true,
+            },
+            {
+                imageUrl: "https://s3.milkyano.com/milkyano/fadedlines-oakleigh/barbers/noah.png",
+                link: generateRoute("/noah"),
+                landing: true,
+            },
+            {
+                imageUrl: "https://s3.milkyano.com/milkyano/fadedlines-oakleigh/barbers/jay.png",
+                link: generateRoute("/jay"),
+                landing: true,
+            },
+            {
+                imageUrl: "https://s3.milkyano.com/milkyano/fadedlines-oakleigh/barbers/wyatt-swick.png",
+                link: generateRoute("/wyatt"),
+                landing: true,
+            },
+            {
+                imageUrl: "https://s3.milkyano.com/milkyano/fadedlines-oakleigh/barbers/emman.png",
+                link: generateRoute("/emman"),
+                landing: true,
+            },
+            {
+                imageUrl: "https://s3.milkyano.com/milkyano/fadedlines-oakleigh/barbers/christos.png",
+                link: generateRoute("/christos"),
+                landing: true,
+            },
+            {
+                imageUrl: "https://s3.milkyano.com/milkyano/fadedlines-oakleigh/barbers/niko.png",
+                link: generateRoute("/niko"),
+                landing: true,
+            },
+            {
+                imageUrl: "https://s3.milkyano.com/milkyano/fadedlines-oakleigh/barbers/dejan.png",
+                link: generateRoute("/dejan"),
+                landing: false,
+            },
+        ])
+    );
+    const [barbers, setBarbers] = useState<[Barbers]>();
 
-    const barberSvgs = [
-        {
-            svg: Amir,
-            link: generateRoute("/amir"),
-            landing: true,
-        },
-        {
-            svg: Rayhan,
-            link: generateRoute("/rayhan"),
-            landing: true,
-        },
-        {
-            svg: Anthony,
-            link: generateRoute("/anthony"),
-            landing: true,
-        },
-        {
-            svg: Josh,
-            link: generateRoute("/josh"),
-            landing: true,
-        },
-        {
-            svg: Noah,
-            link: generateRoute("/noah"),
-            landing: true,
-        },
-        {
-            svg: Jay,
-            link: generateRoute("/jay"),
-            landing: true,
-        },
-        {
-            svg: Wyatt,
-            link: generateRoute("/wyatt"),
-            landing: true,
-        },
-        {
-            svg: Emman,
-            link: generateRoute("/emman"),
-            landing: true,
-        },
-        {
-            svg: Christos,
-            link: generateRoute("/christos"),
-            landing: true,
-        },
-        {
-            svg: Niko,
-            link: generateRoute("/niko"),
-            landing: true,
-        },
-        {
-            svg: Dejan,
-            link: generateRoute("/dejan"),
-            landing: false,
-        },
-    ];
+    useEffect(() => {
+        setBarbers(JSON.parse(barbersParameter));
+    }, [barbersParameter]);
 
     useEffect(() => {
         // Create a new style element
@@ -211,22 +214,23 @@ export default function Barbers() {
 
             <section className="w-full min-h-screen flex  justify-center md:max-w-screen-xl   mx-auto md:py-24 pb-[12rem] md:pb-[4rem] mb-12 relative">
                 <div className="w-full flex flex-wrap mx-auto justify-center items-center px-4 md:px-0">
-                    {barberSvgs.map((barber, index) => (
-                        <Link
-                            to={barber.landing ? barber.link : generateLink()}
-                            key={index}
-                            className="w-full md:w-[300px] py-6 flex flex-col justify-center items-center relative mx-10"
-                        >
-                            <img
-                                src={barber.svg}
-                                alt={`Svg ${index}`}
-                                className="transition-transform duration-500 ease-in-out hover:scale-110 z-30 px-4 md:px-0 mb-12"
-                            />
-                            <Button className="border absolute md:relative bottom-[.5rem] md:bottom-[1rem] px-7 py-5 rounded-lg border-[var(--border-color)] hover:border-white text-[var(--primary-color)] bg-transparent backdrop-blur-md z-30 transform hover:scale-110 transition-transform duration-400 ease-in-out hover:shadow-md hover:bg-[#14FF00] hover:shadow-[#14FF00] text-xs md:text-base hover:text-white">
-                                LEARN MORE
-                            </Button>
-                        </Link>
-                    ))}
+                    {barbers &&
+                        barbers.map((barber, index) => (
+                            <Link
+                                to={barber.landing ? barber.link : generateLink()}
+                                key={index}
+                                className="w-full md:w-[300px] py-6 flex flex-col justify-center items-center relative mx-10"
+                            >
+                                <img
+                                    src={barber.imageUrl}
+                                    alt={`Svg ${index}`}
+                                    className="transition-transform duration-500 ease-in-out hover:scale-110 z-30 px-4 md:px-0 mb-12"
+                                />
+                                <Button className="border absolute md:relative bottom-[.5rem] md:bottom-[1rem] px-7 py-5 rounded-lg border-[var(--border-color)] hover:border-white text-[var(--primary-color)] bg-transparent backdrop-blur-md z-30 transform hover:scale-110 transition-transform duration-400 ease-in-out hover:shadow-md hover:bg-[#14FF00] hover:shadow-[#14FF00] text-xs md:text-base hover:text-white">
+                                    LEARN MORE
+                                </Button>
+                            </Link>
+                        ))}
                 </div>
             </section>
         </Layout>

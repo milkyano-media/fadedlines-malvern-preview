@@ -105,6 +105,8 @@ export interface ParameterValues {
     "content.about_us_headline"?: string;
     "content.footer_tagline"?: string;
     "content.faqs"?: string;
+    "content.barber_list"?: string;
+    "content.cut_gallery"?: string;
 
     // Feature flags (Phase 1)
     "feature.booking_enabled"?: boolean;
