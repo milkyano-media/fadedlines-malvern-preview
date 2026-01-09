@@ -1,6 +1,8 @@
 // TEMPORARILY HIDDEN - Imports for login functionality
 // import { LoginModal } from "@/components/auth/LoginModal";
 import Logo from "@/components/react-svg/logo";
+import IconNavbarGreen from "@/assets/svg/icon-navbar-green.svg";
+import HeaderMiddle from "@/assets/web/navbar-logo-malvern.png";
 // import {
 //     DropdownMenu,
 //     DropdownMenuContent,
@@ -113,16 +115,23 @@ const Header: React.FC = () => {
                 background: "linear-gradient(180deg, rgba(3, 18, 13, 0.75) 14.29%, rgba(3, 18, 13, 0.6) 100%)",
             }}
         >
-            <div className="container mx-auto flex justify-between items-center relative border-none px-2 md:px-4">
+            <div className="container mx-auto flex justify-between items-center relative z-10 border-none px-2 md:px-4">
                 <h1 className="text-2xl font-bold text-transparent hidden ">Barber Shop</h1>
                 <div className="flex flex-col justify-center items-center">
                     <Link to={generateRoute("/home")}>
-                        {currentLogo ? (
-                            <img src={currentLogo} alt="logo" className="w-48 md:w-36 h-auto opacity-90" />
-                        ) : (
-                            <Logo className="w-48 md:w-36 h-auto opacity-90 " />
-                        )}
+                        <img
+                            src={IconNavbarGreen}
+                            alt="Fadedlines Barber Shop"
+                            className="w-8 md:w-10 h-auto opacity-100"
+                        />
                     </Link>
+                </div>
+                <div className="lg:hidden absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-0 pointer-events-none">
+                    <img
+                        src={HeaderMiddle}
+                        alt="Header decoration"
+                        className="h-20 md:h-24 w-auto opacity-100"
+                    />
                 </div>
                 <nav className="hidden lg:block sticky top-0">
                     <ul className="flex text-white/80">
