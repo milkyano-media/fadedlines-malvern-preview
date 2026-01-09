@@ -41,7 +41,6 @@ const NavLink: React.FC<NavLinkProps> = ({ to, label }) => {
 
 const links = [
     { to: "/", label: "Home" },
-    { to: "/barbers", label: "Barbers" },
     { to: "/gallery", label: "Gallery" },
     { to: "/about-us", label: "About Us" },
     { to: "/careers", label: "Careers" },
@@ -108,7 +107,7 @@ const Header: React.FC = () => {
     return (
         <header
             ref={headerRef}
-            className="text-white shadow-lg shadow-[--shadow-color] border-b-[0.5px] border-[var(--border-color)] z-50 py-4 sticky top-0"
+            className="text-white shadow-lg shadow-[--shadow-color] border-b-[0.5px] border-[var(--border-color)] z-[100] py-4 sticky top-0"
             style={{
                 marginBottom: `-${height}px`,
                 background: "linear-gradient(180deg, rgba(3, 18, 13, 0.75) 14.29%, rgba(3, 18, 13, 0.6) 100%)",
@@ -135,16 +134,6 @@ const Header: React.FC = () => {
                                 }`}
                             >
                                 HOME
-                            </Link>
-                        </li>
-                        <li>
-                            <Link
-                                to={generateRoute("/barbers")}
-                                className={`text-md uppercase font-bold px-4 hover:text-white ${
-                                    location.pathname === "/barbers" ? "text-white" : ""
-                                }`}
-                            >
-                                BARBERS
                             </Link>
                         </li>
                         <li>
