@@ -22,7 +22,7 @@ import JoshGallery from "@/assets/web/barbers/barbers-gallery/josh.png";
 import JoshCTA from "@/assets/web/barbers/cta-button/josh.svg";
 import JoshCTAHover from "@/assets/web/barbers/cta-button/josh-hover.svg";
 
-export const generateLink = (text: string): JSX.Element => {
+export const generateLink = (text: string, disabled: boolean = false, disabledText: string = ""): JSX.Element => {
   const customize: boolean = true;
   const squareLink: string =
     "https://book.squareup.com/appointments/ud9yhcwfqc1fg0/location/LY7BZ89WAQ2QS/services";
@@ -33,6 +33,10 @@ export const generateLink = (text: string): JSX.Element => {
     bookLink = `/meta/book/services`;
   } else {
     bookLink = "/book/services";
+  }
+
+  if (disabled) {
+    return <span>{disabledText || text}</span>;
   }
 
   if (customize) {

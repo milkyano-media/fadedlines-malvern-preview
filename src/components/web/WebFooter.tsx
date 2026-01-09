@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import Logo from "@/assets/web/icons/logo.svg";
 import Instagram from "@/assets/web/icons/Instagram.svg";
 import Tiktok from "@/assets/web/icons/Tiktok.svg";
 import Maps from "@/assets/web/icons/Maps.svg";
 import GoogleReview from "@/assets/web/icons/GoogleReview.svg";
-import BookNowButton from "@/components/web/BookNowButton";
 import { useParameterValue } from "@/hooks/useParameter";
 
 interface OpeningTime {
@@ -15,8 +14,6 @@ interface OpeningTime {
 }
 
 const WebFooter: React.FC = () => {
-    const navigate = useNavigate();
-
     // Fetch footer parameters
     const googleAddressParameter = useParameterValue<string>("contact.google_maps_url", "https://g.co/kgs/sdqFwMj");
     const googleReviewParameter = useParameterValue<string>("contact.google_review_url", "https://shorturl.at/2UR17");
@@ -53,9 +50,6 @@ const WebFooter: React.FC = () => {
                             alt="barber shop faded lines"
                             className="w-[20rem] h-auto"
                         />
-                        <div className="flex justify-center md:justify-start w-[20rem]">
-                            <BookNowButton onClick={() => navigate('/book/services')} className="w-fit" />
-                        </div>
                         <div className="flex flex-col gap-4 relative z-[99999999]">
                             <h4 className="text-sm font-poppins font-medium">Visit us on:</h4>
                             <ul className="flex gap-4 font-light relative z-40">
