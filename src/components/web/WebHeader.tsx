@@ -1,6 +1,5 @@
 // TEMPORARILY HIDDEN - Imports for login functionality
 // import { LoginModal } from "@/components/auth/LoginModal";
-import Logo from "@/components/react-svg/logo";
 import IconNavbarGreen from "@/assets/svg/icon-navbar-green.svg";
 import HeaderMiddle from "@/assets/web/navbar-logo-malvern.png";
 // import {
@@ -15,7 +14,6 @@ import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTrigger } from
 // import { useAuth } from "@/hooks/useAuth";
 import { useFeatureFlag, useParameterValue } from "@/hooks/useParameter";
 import { generateLink } from "@/pages/web/Home";
-import { useTheme } from "@/ThemeProvider";
 // import { LogOut, Settings, User } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
@@ -57,13 +55,6 @@ const Header: React.FC = () => {
     // const navigate = useNavigate();
     // const { isAuthenticated, user, logout } = useAuth();
 
-    // Fetch logo parameters
-    const { theme } = useTheme();
-    const logoUrl = useParameterValue<string>("branding.logo", "");
-    const logoUrlDark = useParameterValue<string>("branding.logo_dark", "");
-
-    // Use dark logo if theme is dark and dark logo exists, otherwise use regular logo, fallback to Logo component
-    const currentLogo = theme === "dark" && logoUrlDark ? logoUrlDark : logoUrl || null;
 
     const ctaTextParameter = useParameterValue<string>("content.cta_primary_text", "Book Now");
     const bookEnabledParameter = useFeatureFlag("booking_enabled", true);
